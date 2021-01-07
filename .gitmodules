@@ -1,0 +1,3 @@
+[submodule "Blast"]
+	path = Blast
+	url = https://github.com/jamestelfer/Blast.git
