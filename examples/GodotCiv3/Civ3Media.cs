@@ -19,7 +19,7 @@ public class Civ3Media : Node2D
 //      
 //  }
 
-    public override void TerrainPlay()
+    public void TerrainPlay()
     {
         //
     }
