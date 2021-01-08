@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+/*
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+*/
 
 namespace ReadCivData.ConvertCiv3Media
 {
@@ -66,6 +68,7 @@ namespace ReadCivData.ConvertCiv3Media
             }
 
         }
+        /*
         // not a generalized pcx reader
         // assumes 8-bit image with 256-color 8-bit rgb palette
         static Image<Rgba32> Read(byte[] inPcx, int[] transparent) {
@@ -134,5 +137,6 @@ namespace ReadCivData.ConvertCiv3Media
                 ImgData.SaveAsPng(fs);
             }
         }
+        */
     }
 }
