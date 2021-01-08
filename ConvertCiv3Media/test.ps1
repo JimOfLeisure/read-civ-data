@@ -4,6 +4,9 @@ Add-Type  -Path 'bin/Debug/netstandard2.0/ReadCivData.ConvertCiv3Media.dll'
 # [ReadCivData.ConvertCiv3Media.Flic]::SaveOutPngs()
 # [ReadCivData.ConvertCiv3Media.Pcx]::SaveOutPng()
 
-$foo = New-Object ReadCivData.ConvertCiv3Media.Pcx
+$foo = New-Object ReadCivData.ConvertCiv3Media.Pcx("/Users/jim/code/src/tmp/Godot/civ3play/temp/popHeads-ORIG.pcx")
 
-$foo.Palette;
+# $foo.Palette
+$foo.Image
+$foo.Width
+$foo.Height

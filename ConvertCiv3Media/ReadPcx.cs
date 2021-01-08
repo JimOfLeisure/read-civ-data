@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace ReadCivData.ConvertCiv3Media
 {
+    // refactoring from static conversion to ImageSharp, to width, height, palette, and pixel data
     public class Pcx {
         public byte[,] Palette = new byte[256,3];
-        public byte[] Image;
-        public int Width;
-        public int Height;
+        public List<byte> Image = new List<byte>();
+        public int Width = 0;
+        public int Height = 0;
         public Pcx(){}
         public Pcx(string path) {
             this.Load(path);
@@ -35,6 +37,32 @@ namespace ReadCivData.ConvertCiv3Media
                 this.Palette[i,0] = PcxBytes[PaletteOffset + i * 3];
                 this.Palette[i,1] = PcxBytes[PaletteOffset + i * 3 + 1];
                 this.Palette[i,2] = PcxBytes[PaletteOffset + i * 3 + 2];
+            }
+            bool JunkByte = BytesPerLine > Width;
+            for (int ImgIdx = 0, PcxIdx = 0x80, RunLen = 0, LineIdx = 0; ImgIdx < Width * Height; ) {
+                // if two most significant bits are 11
+                if ((PcxBytes[PcxIdx] & 0xc0) == 0xc0) {
+                    // then it & 0x3f is the run length of the following byte
+                    RunLen = PcxBytes[PcxIdx] & 0x3f;
+                    PcxIdx++;
+                    for (int j = 0; j < RunLen; j++) {
+                        if (!(JunkByte && LineIdx % BytesPerLine == BytesPerLine - 1)) {
+                            // OutPixel[ImgIdx % Width, ImgIdx / Width] = Palette[PcxBytes[PcxIdx]];
+                            this.Image.Add(PcxBytes[PcxIdx]);
+                            ImgIdx++;
+                        }
+                        LineIdx++;
+                    }
+                    PcxIdx++;
+                } else {
+                    if (!(JunkByte && LineIdx % BytesPerLine == BytesPerLine - 1)) {
+                        // OutPixel[ImgIdx % Width, ImgIdx / Width] = Palette[PcxBytes[PcxIdx]];
+                        this.Image.Add(PcxBytes[PcxIdx]);
+                        ImgIdx++;
+                    }
+                    PcxIdx++;
+                    LineIdx++;
+                }
             }
 
         }
