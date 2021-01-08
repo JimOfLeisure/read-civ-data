@@ -34,7 +34,7 @@ public class Civ3Media : Node2D
         for (int i = 0; i < TerrainTexture.Width * TerrainTexture.Height; i++)
         {
             try {
-            GrassLandImage.SetPixel(i % TerrainTexture.Width, i / TerrainTexture.Width, Color.Color8(TerrainTexture.Palette[TerrainTexture.Image[i],0], TerrainTexture.Palette[TerrainTexture.Image[i],1], TerrainTexture.Palette[TerrainTexture.Image[i],2]));
+            GrassLandImage.SetPixel(i % TerrainTexture.Width, i / TerrainTexture.Width, Color.Color8(TerrainTexture.Palette[TerrainTexture.Image[i],0], TerrainTexture.Palette[TerrainTexture.Image[i],1], TerrainTexture.Palette[TerrainTexture.Image[i],2], TerrainTexture.Image[i] == 255 ? (byte)0 : (byte)255));
             } catch{ GD.Print(i % TerrainTexture.Width + " " + i / TerrainTexture.Width); }
         }
         GrassLandImage.Unlock();
