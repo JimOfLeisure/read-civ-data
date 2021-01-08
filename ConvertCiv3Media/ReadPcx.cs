@@ -6,6 +6,38 @@ using SixLabors.ImageSharp.PixelFormats;
 namespace ReadCivData.ConvertCiv3Media
 {
     public class Pcx {
+        public byte[,] Palette = new byte[256,3];
+        public byte[] Image;
+        public int Width;
+        public int Height;
+        public Pcx(){}
+        public Pcx(string path) {
+            this.Load(path);
+        }
+        // not a generalized pcx reader
+        // assumes 8-bit image with 256-color 8-bit rgb palette
+        public void Load(string path) {
+            byte[] PcxBytes = File.ReadAllBytes(path);
+            int LeftMargin = BitConverter.ToInt16(PcxBytes, 4);
+            int TopMargin = BitConverter.ToInt16(PcxBytes, 6);
+            int RightMargin = BitConverter.ToInt16(PcxBytes, 8);
+            int BottomMargin = BitConverter.ToInt16(PcxBytes, 10);
+            // assuming 1 color plane
+            // this is always even, so last byte may be junk if image width is odd
+            int BytesPerLine = BitConverter.ToInt16(PcxBytes, 0x42);
+
+            this.Width = RightMargin - LeftMargin;
+            this.Height = BottomMargin - TopMargin;
+            int ImageLength = BytesPerLine * Height;
+            int PaletteOffset = PcxBytes.Length - 768;
+
+            for (int i = 0; i < 256; i++) {
+                this.Palette[i,0] = PcxBytes[PaletteOffset + i * 3];
+                this.Palette[i,1] = PcxBytes[PaletteOffset + i * 3 + 1];
+                this.Palette[i,2] = PcxBytes[PaletteOffset + i * 3 + 2];
+            }
+
+        }
         // not a generalized pcx reader
         // assumes 8-bit image with 256-color 8-bit rgb palette
         static Image<Rgba32> Read(byte[] inPcx, int[] transparent) {
