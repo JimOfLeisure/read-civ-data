@@ -33,9 +33,9 @@ public class Civ3Media : Node2D
         GrassLandImage.Lock();
         for (int i = 0; i < TerrainTexture.Width * TerrainTexture.Height; i++)
         {
-            try {
+            // try {
             GrassLandImage.SetPixel(i % TerrainTexture.Width, i / TerrainTexture.Width, Color.Color8(TerrainTexture.Palette[TerrainTexture.Image[i],0], TerrainTexture.Palette[TerrainTexture.Image[i],1], TerrainTexture.Palette[TerrainTexture.Image[i],2], TerrainTexture.Image[i] == 255 ? (byte)0 : (byte)255));
-            } catch{ GD.Print(i % TerrainTexture.Width + " " + i / TerrainTexture.Width); }
+            // } catch{ GD.Print(i % TerrainTexture.Width + " " + i / TerrainTexture.Width); }
         }
         GrassLandImage.Unlock();
         Sprite TerrSprite = new Sprite();
@@ -48,6 +48,8 @@ public class Civ3Media : Node2D
         {
             // TerrSprite.Position.x = (i % 9) * 128 + (64 * ((i / 9) % 2));
             // TerrSprite.Position.y = (i / 9) * 32;
+            Vector2 pos = new Vector2((i % 9) * 128 + (64 * ((i / 9) % 2)),(i / 9) * 32 );
+            TerrSprite.Position = pos;
             TerrSprite.Frame = (new Random()).Next() % 81;
             AddChild(TerrSprite.Duplicate());
         }
