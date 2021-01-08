@@ -60,5 +60,8 @@
     <Compile Include="Civ3Media.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ConvertCiv3Media\ReadCivData.ConvertCiv3Media.csproj" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

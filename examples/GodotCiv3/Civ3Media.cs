@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using ReadCivData.ConvertCiv3Media;
 
 public class Civ3Media : Node2D
 {
@@ -11,6 +12,7 @@ public class Civ3Media : Node2D
     {
         GD.Print(Civ3Path);
         GD.Randomize();
+        this.TerrainPlay();
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -21,6 +23,8 @@ public class Civ3Media : Node2D
 
     public void TerrainPlay()
     {
-        //
+        string path = this.Civ3Path + "/Art/Terrain/xpgc.pcx";
+        Pcx TerrainTexture = new Pcx(path);
+        GD.Print(TerrainTexture.Height);
     }
 }
