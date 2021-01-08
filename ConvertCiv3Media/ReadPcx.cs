@@ -11,7 +11,7 @@ namespace ReadCivData.ConvertCiv3Media
     // refactoring from static conversion to ImageSharp, to width, height, palette, and pixel data
     public class Pcx {
         public byte[,] Palette = new byte[256,3];
-        public List<byte> Image = new List<byte>();
+        public byte[] Image = new byte[]{};
         public int Width = 0;
         public int Height = 0;
         public Pcx(){}
@@ -40,6 +40,7 @@ namespace ReadCivData.ConvertCiv3Media
                 this.Palette[i,1] = PcxBytes[PaletteOffset + i * 3 + 1];
                 this.Palette[i,2] = PcxBytes[PaletteOffset + i * 3 + 2];
             }
+            List<byte> ListImage = new List<byte>();
             bool JunkByte = BytesPerLine > Width;
             for (int ImgIdx = 0, PcxIdx = 0x80, RunLen = 0, LineIdx = 0; ImgIdx < Width * Height; ) {
                 // if two most significant bits are 11
@@ -50,7 +51,7 @@ namespace ReadCivData.ConvertCiv3Media
                     for (int j = 0; j < RunLen; j++) {
                         if (!(JunkByte && LineIdx % BytesPerLine == BytesPerLine - 1)) {
                             // OutPixel[ImgIdx % Width, ImgIdx / Width] = Palette[PcxBytes[PcxIdx]];
-                            this.Image.Add(PcxBytes[PcxIdx]);
+                            ListImage.Add(PcxBytes[PcxIdx]);
                             ImgIdx++;
                         }
                         LineIdx++;
@@ -59,13 +60,14 @@ namespace ReadCivData.ConvertCiv3Media
                 } else {
                     if (!(JunkByte && LineIdx % BytesPerLine == BytesPerLine - 1)) {
                         // OutPixel[ImgIdx % Width, ImgIdx / Width] = Palette[PcxBytes[PcxIdx]];
-                        this.Image.Add(PcxBytes[PcxIdx]);
+                        ListImage.Add(PcxBytes[PcxIdx]);
                         ImgIdx++;
                     }
                     PcxIdx++;
                     LineIdx++;
                 }
             }
+            this.Image = ListImage.ToArray();
 
         }
         /*
