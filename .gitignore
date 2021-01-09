@@ -2,6 +2,7 @@ sav/
 *.png
 *.pcx
 *.flc
+.vscode/
 
 *.swp
 *.*~
