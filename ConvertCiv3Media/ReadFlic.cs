@@ -85,25 +85,24 @@ namespace ReadCivData.ConvertCiv3Media
                                 head++;
                                 for (; x < Width;) {
                                     int TypeSize = (sbyte)FlicBytes[head];
+                                    // TypeSize == 0 makes no sense, something is wrong
                                     if (TypeSize == 0) {
                                         throw new ApplicationException("TypeSize is 0");
                                     }
-                                    if (TypeSize > 0) {
-                                        head++;
-                                        for (int foo = 0; foo < Math.Abs(TypeSize); foo++) {
-                                            try {
-                                            this.Images[f][y * this.Width + x] = FlicBytes[head];
-                                            } catch { Console.WriteLine(f + " " + y + " " + x); }
-                                            x++;
-                                        }
-                                        head++;
-                                    } else {
-                                        head++;
-                                        for (int foo = 0; foo < Math.Abs(TypeSize); foo++) {
-                                            this.Images[f][y * this.Width + x] = FlicBytes[head];
+                                    head++;
+                                    // If TypeSize is positive, copy TypeSize following bytes
+                                    // If TypeSise is negative, repeat the next byte abs(TypeSize) times
+                                    bool CopyMany = TypeSize < 0;
+                                    for (int foo = 0; foo < Math.Abs(TypeSize); foo++) {
+                                        this.Images[f][y * this.Width + x] = FlicBytes[head];
+                                        x++;
+                                        if (CopyMany) {
                                             head++;
-                                            x++;
                                         }
+                                    }
+                                    // If we were repeating a byte, we're still pointing at it; advance head
+                                    if (!CopyMany) {
+                                        head++;
                                     }
                                 }
                             }
