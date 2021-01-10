@@ -30,8 +30,9 @@ namespace ReadCivData.ConvertCiv3Media
             // this is always even, so last byte may be junk if image width is odd
             int BytesPerLine = BitConverter.ToInt16(PcxBytes, 0x42);
 
-            this.Width = RightMargin - LeftMargin;
-            this.Height = BottomMargin - TopMargin;
+            this.Width = RightMargin - LeftMargin + 1;
+            this.Height = BottomMargin - TopMargin + 1;
+            Console.WriteLine(this.Width + "x" + this.Height);
             // Palette is 256*3 bytes at end of file
             int PaletteOffset = PcxBytes.Length - 768;
 
