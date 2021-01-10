@@ -12,8 +12,8 @@ public class Civ3Media : Node2D
     {
         GD.Print(Civ3Path);
         GD.Randomize();
-        this.TerrainAsSprites();
-        // this.TerrainAsTileMap();
+        // this.TerrainAsSprites();
+        this.TerrainAsTileMap();
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -26,10 +26,10 @@ public class Civ3Media : Node2D
     {
         string path = this.Civ3Path + "/Art/Terrain/xpgc.pcx";
         Pcx TerrainTexture = new Pcx(path);
-        // Image GrassLandImage = new Image();
         Image GrassLandImage = ByteArrayToImage(TerrainTexture.Image, TerrainTexture.Palette, TerrainTexture.Width, TerrainTexture.Height);
         Sprite TerrSprite = new Sprite();
         ImageTexture TerrText = new ImageTexture();
+        // TODO: parametrize flags parameter
         TerrText.CreateFromImage(GrassLandImage, 0);
         TerrSprite.Texture = TerrText;
         TerrSprite.Hframes = 9;
@@ -48,6 +48,15 @@ public class Civ3Media : Node2D
         TileMap TM = new TileMap();
         TileSet TS = new TileSet();
         TM.TileSet = TS;
+
+        Pcx PcxTxtr = new Pcx(Civ3Path + "/Art/Terrain/xpgc.pcx");
+        Image ImgTxtr = ByteArrayToImage(PcxTxtr.Image, PcxTxtr.Palette, PcxTxtr.Width, PcxTxtr.Height);
+        ImageTexture Txtr = new ImageTexture();
+        // TODO: parametrize flags parameter
+        Txtr.CreateFromImage(ImgTxtr, 0);
+        // TODO: figure out what significance id parameter is
+        TS.TileSetTexture(0, Txtr);
+        TS.AutotileSetSize(0, new Vector2(128,64));
         AddChild(TM);
     }
     Image ByteArrayToImage(byte[] ba, byte[,] palette, int width, int height) {
