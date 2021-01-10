@@ -46,6 +46,7 @@ public class Civ3Media : Node2D
         // Default values of square tiles and 64x64 size works for our needs
         // Although tiles appear isometric, they are logically laid out as a checkerboard pattern on a square grid
         TileMap TM = new TileMap();
+        TM.CellSize = new Vector2(64,32);
         TileSet TS = new TileSet();
         TM.TileSet = TS;
 
@@ -65,12 +66,14 @@ public class Civ3Media : Node2D
 
         // ResourceSaver.Save("tileset.tres", TS);
         // FIXME: None of the following seems to place tiles
-        TM.SetCellv(new Vector2(10,10), 0);
-        for (int y = 0; y < 20; y++) {
-            for (int x = 0; x < 20; x++) {
+        // TM.SetCellv(new Vector2(10,10), 0);
+        int mywidth = 14;
+        for (int y = 0; y < mywidth; y++) {
+            for (int x = 0; x < mywidth; x+=2) {
                 try {
-                TM.SetCellv(new Vector2(x, y), x + y * 20);
-                } catch { GD.Print(x + y * 20); }
+                // TM.SetCellv(new Vector2(x, y), x + y * mywidth);
+                TM.SetCellv(new Vector2(x + (y % 2), y), 0);
+                } catch { GD.Print(x + y * mywidth); }
             }
         }
         GD.Print(TS.GetTilesIds());
