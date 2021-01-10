@@ -64,11 +64,11 @@ namespace ReadCivData.ConvertCiv3Media
                             // Palette chunk
                             int NumPackets = BitConverter.ToUInt16(FlicBytes, SubOffset + 6);
                             if (NumPackets != 1) {
-                                throw new ArgumentException("Unable to deal with color palette with more than one packet; NumPackets = " + NumPackets);
+                                throw new ApplicationException("Unable to deal with color palette with more than one packet; NumPackets = " + NumPackets);
                             }
                             int SkipCount = BitConverter.GetBytes(BitConverter.ToChar(FlicBytes, SubOffset + 8))[0];
                             if (SkipCount != 0) {
-                                throw new ArgumentException("Unable to deal with color palette with non-zero SkipCount = " + SkipCount);
+                                throw new ApplicationException("Unable to deal with color palette with non-zero SkipCount = " + SkipCount);
                             }
                             for (int p = 0; p < 256; p++) {
                                 this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3];
@@ -78,8 +78,6 @@ namespace ReadCivData.ConvertCiv3Media
                             break;
                         case 15:
                             // run-length-encoded full frame chunk
-                            // Assuming only one 15 subchunk per frame
-                            // first frame has pixel subchunk before palette subchunk, so will extract to temp byte array
                             for (int y = 0, x = 0, head = SubOffset + 6; y < Height; y++, x = 0) {
                                 // first byte of row is obsolete
                                 head++;
