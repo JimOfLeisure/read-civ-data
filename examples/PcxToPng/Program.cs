@@ -26,7 +26,7 @@ namespace FlcToPngs
                     PopHeads.Palette[i,1],
                     PopHeads.Palette[i,2],
                     // For PopHeads, palette 254 and 255 are transparent
-                    i > 253 ? 0 : 255
+                    i > 253 ? (byte)0 : (byte)255
                 );
             }
 
@@ -34,7 +34,7 @@ namespace FlcToPngs
             Image<Rgba32> ISImage = new Image<Rgba32>(PopHeads.Width, PopHeads.Height);
             for (int y = 0; y < PopHeads.Height; y++) {
                 for (int x = 0; x < PopHeads.Width; x++) {
-                    ISImage[x, y] = ISPalette[PopHeads.Image[x + y * x]];
+                    ISImage[x, y] = ISPalette[PopHeads.Image[x + y * PopHeads.Width]];
                 }
             }
 
