@@ -47,6 +47,7 @@ public class Civ3Media : Node2D
         // Although tiles appear isometric, they are logically laid out as a checkerboard pattern on a square grid
         TileMap TM = new TileMap();
         TM.CellSize = new Vector2(64,32);
+        // TM.CenteredTextures = true;
         TileSet TS = new TileSet();
         TM.TileSet = TS;
 
@@ -67,14 +68,9 @@ public class Civ3Media : Node2D
         int mywidth = 14;
         for (int y = 0; y < mywidth; y++) {
             for (int x = 0; x < mywidth; x+=2) {
-                try {
-                // TM.SetCellv(new Vector2(x, y), x + y * mywidth);
-                TM.SetCellv(new Vector2(x + (y % 2), y), 0);
                 TM.SetCellv(new Vector2(x + (y % 2), y), (new Random()).Next() % TS.GetTilesIds().Count);
-                } catch { GD.Print(x + y * mywidth); }
             }
         }
-        GD.Print(TS.GetTilesIds());
         AddChild(TM);
     }
     // I'm failing to get the auto/atlas thing working in code
