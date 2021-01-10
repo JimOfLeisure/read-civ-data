@@ -15,6 +15,7 @@ namespace FlcToPngs
         {
             // Flic decoder
             Flic MyAnimation = new Flic(PcxFilePath);
+            // Pcx PaletteFile = new Pcx(Civ3RootPath + "/Art/Units/Palettes/otp01.pcx");
 
             // Create ImageSharp color Palette
             Rgba32[] ISPalette = new Rgba32[256]; 
