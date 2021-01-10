@@ -14,6 +14,7 @@ public class Civ3Media : Node2D
         GD.Randomize();
         // this.TerrainAsSprites();
         this.TerrainAsTileMap();
+        // this.TerrainAsAtlasTileMap();
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -52,6 +53,7 @@ public class Civ3Media : Node2D
         Pcx PcxTxtr = new Pcx(Civ3Path + "/Art/Terrain/xpgc.pcx");
         Image ImgTxtr = ByteArrayToImage(PcxTxtr.Image, PcxTxtr.Palette, PcxTxtr.Width, PcxTxtr.Height);
         ImageTexture Txtr = new ImageTexture();
+        Txtr.CreateFromImage(ImgTxtr, 0);
 
         int id = TS.GetLastUnusedTileId();
         for (int y = 0; y < PcxTxtr.Height; y += 64) {
@@ -67,8 +69,8 @@ public class Civ3Media : Node2D
             for (int x = 0; x < mywidth; x+=2) {
                 try {
                 // TM.SetCellv(new Vector2(x, y), x + y * mywidth);
-                // TM.SetCellv(new Vector2(x + (y % 2), y), 0);
-                TM.SetCellv(new Vector2(x + (y % 2), y), (x / 2) % TS.GetTilesIds().Count);
+                TM.SetCellv(new Vector2(x + (y % 2), y), 0);
+                TM.SetCellv(new Vector2(x + (y % 2), y), (new Random()).Next() % TS.GetTilesIds().Count);
                 } catch { GD.Print(x + y * mywidth); }
             }
         }
