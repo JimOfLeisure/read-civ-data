@@ -65,18 +65,9 @@ namespace ReadCivData.ConvertCiv3Media
                                 throw new ArgumentException("Unable to deal with color palette with non-zero SkipCount = " + SkipCount);
                             }
                             for (int p = 0; p < 256; p++) {
-                                // Have to explicitly cast byte or it may use the normalized float constructor instead
-                                Palette[p] = new Rgba32(
-                                    (byte)FlicBytes[8 + SubOffset + p * 3],
-                                    (byte)FlicBytes[8 + SubOffset + p * 3 + 1],
-                                    (byte)FlicBytes[8 + SubOffset + p * 3 + 2],
-                                    Array.Exists<int>(transparent, e => e == p) ? (byte)0 : (byte)255
-                                );
-                                // Trying out shadows, but this only works on units I think
-                                // These shadows look good on units!
-                                for (int foo = 240; foo < 256; foo++) {
-                                    Palette[foo] = new Rgba32(0,0,0,(byte)((255 - foo) *16));
-                                }
+                                this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3];
+                                this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3 + 1];
+                                this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3 + 2];
                             }
                             PaletteIsFilled = true;
                             break;
@@ -112,7 +103,7 @@ namespace ReadCivData.ConvertCiv3Media
                             break;
                         case 7:
                             // Copy last frame image
-                            OutImages[f] = OutImages[f-1].CloneAs<Rgba32>();
+                            Array.Copy(this.Images[f], this.Images[f-1], this.Images[f].Length);
                             int NumLines = BitConverter.ToUInt16(FlicBytes, SubOffset + 6);
                             for (int Line = 0, y = 0, head = SubOffset + 8; Line < NumLines; Line++) {
                                 int WordsPerLine = BitConverter.ToInt16(FlicBytes, head);
@@ -126,7 +117,8 @@ namespace ReadCivData.ConvertCiv3Media
                                 // Last pixel for odd-length lines?
                                 // This may not have been tested; none of my Flics change the last pixel
                                 if ((WordsPerLine & 0x800) == 0x800) {
-                                    OutImages[f][Width - 1, y] = Palette[(byte)(WordsPerLine & 0xff)];
+                                    // OutImages[f][Width - 1, y] = Palette[(byte)(WordsPerLine & 0xff)];
+                                    this.Images[f][this.Width * (y + 1) - 1] = (byte)(WordsPerLine & 0xff);
                                     WordsPerLine = BitConverter.ToInt16(FlicBytes, head);
                                     head+=2;
                                 }
@@ -141,8 +133,10 @@ namespace ReadCivData.ConvertCiv3Media
                                     bool Positive = NumWords > 0;
                                     head++;
                                     for (int ii = 0; ii < Math.Abs(NumWords); ii++) {
-                                        OutImages[f][x,y] = Palette[FlicBytes[head]];
-                                        OutImages[f][x+1,y] = Palette[FlicBytes[head+1]];
+                                        // OutImages[f][x,y] = Palette[FlicBytes[head]];
+                                        // OutImages[f][x+1,y] = Palette[FlicBytes[head+1]];
+                                        this.Images[f][this.Width * y + x] = FlicBytes[head];
+                                        this.Images[f][this.Width * y + x + 1] = FlicBytes[head + 1];
                                         if (Positive) { head += 2; }
                                         x += 2;
                                     }
