@@ -9,9 +9,8 @@ namespace FlcToPngs
     class Program
     {
         static string OutFilePath = "out.png";
-        static string Civ3RootPath = @"/Volumes/minio-storage/steamapps/steamapps/common/Sid\ Meier\'s\ Civilization\ III\ Complete";
-        // static string PcxFilePath = Civ3RootPath + @"/Art/SmallHeads/popHeads.pcx";
-        static string PcxFilePath = @"popHeads.pcx";
+        static string Civ3RootPath = @"/Volumes/minio-storage/steamapps/steamapps/common/Sid Meier's Civilization III Complete";
+        static string PcxFilePath = Civ3RootPath + @"/Art/SmallHeads/popHeads.pcx";
         static void Main(string[] args)
         {
             // PCX decoder
