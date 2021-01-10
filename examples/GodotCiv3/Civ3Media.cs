@@ -12,7 +12,8 @@ public class Civ3Media : Node2D
     {
         GD.Print(Civ3Path);
         GD.Randomize();
-        this.TerrainAsSprites();
+        // this.TerrainAsSprites();
+        this.TerrainAsTileMap();
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,5 +47,13 @@ public class Civ3Media : Node2D
             TerrSprite.Frame = (new Random()).Next() % 81;
             AddChild(TerrSprite.Duplicate());
         }
+    }
+    public void TerrainAsTileMap() {
+        // Default values of square tiles and 64x64 size works for our needs
+        // Although tiles appear isometric, they are logically laid out as a checkerboard pattern on a square grid
+        TileMap TM = new TileMap();
+        TileSet TS = new TileSet();
+        TM.TileSet = TS;
+        AddChild(TM);
     }
 }
