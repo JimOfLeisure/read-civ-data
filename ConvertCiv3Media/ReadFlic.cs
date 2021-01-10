@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+/*
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+*/
 
 namespace ReadCivData.ConvertCiv3Media
 {
@@ -9,8 +11,11 @@ namespace ReadCivData.ConvertCiv3Media
     // Not intended to be a generalized/universal Flic reader
     // Implementing from description at https://www.drdobbs.com/windows/the-flic-file-format/184408954
     public class Flic {
-        byte[][] Images;
+        // Images is an array of images, each of which is a byte array of palette indexes
+        // In the future this may become a 3-dimensional array of direction - images - byte array
+        public byte[][] Images;
         // All animations/images have same palette, height, and width
+        // Palette is 256 colors in red, green, blue order
         public byte[,] Palette = new byte[256,3];
         public int Width = 0;
         public int Height = 0;
