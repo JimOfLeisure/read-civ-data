@@ -27,7 +27,9 @@ namespace FlcToPngs
                     MyAnimation.Palette[i,1],
                     MyAnimation.Palette[i,2],
                     // For MyAnimation, palette 255 is transparent
-                    i == 255 ? (byte)0 : (byte)255
+                    // i == 255 ? (byte)0 : (byte)255
+                    // shadows and transparency for 240-255
+                    i > 239 ? (byte)((255 -i) * 16) : (byte)255
                 );
             }
 

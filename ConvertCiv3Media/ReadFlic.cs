@@ -76,8 +76,8 @@ namespace ReadCivData.ConvertCiv3Media
                             }
                             for (int p = 0; p < 256; p++) {
                                 this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3];
-                                this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3 + 1];
-                                this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3 + 2];
+                                this.Palette[p,1] = FlicBytes[8 + SubOffset + p * 3 + 1];
+                                this.Palette[p,2] = FlicBytes[8 + SubOffset + p * 3 + 2];
                             }
                             // PaletteIsFilled = true;
                             break;
