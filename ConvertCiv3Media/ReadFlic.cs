@@ -117,9 +117,13 @@ namespace ReadCivData.ConvertCiv3Media
                             // ImageReady = true;
                             break;
                         case 7:
+                            // TODO: figure out why frame 0 gets overwritten
+                            if (f == 0) {
+                                break;
+                            }
                             // diff chunk
                             // Copy last frame image
-                            Array.Copy(this.Images[f], this.Images[f-1], this.Images[f].Length);
+                            Array.Copy(this.Images[f-1], this.Images[f], this.Images[f].Length);
                             int NumLines = BitConverter.ToUInt16(FlicBytes, SubOffset + 6);
                             for (int Line = 0, y = 0, head = SubOffset + 8; Line < NumLines; Line++) {
                                 int WordsPerLine = BitConverter.ToInt16(FlicBytes, head);
