@@ -12,7 +12,7 @@ public class Civ3Media : Node2D
     {
         GD.Print(Civ3Path);
         GD.Randomize();
-        this.TerrainPlay();
+        this.TerrainAsSprites();
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -21,7 +21,7 @@ public class Civ3Media : Node2D
 //      
 //  }
 
-    public void TerrainPlay()
+    public void TerrainAsSprites()
     {
         string path = this.Civ3Path + "/Art/Terrain/xpgc.pcx";
         Pcx TerrainTexture = new Pcx(path);
