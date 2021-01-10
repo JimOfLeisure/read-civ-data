@@ -15,8 +15,6 @@ namespace FlcToPngs
         {
             // Flic decoder
             Flic MyAnimation = new Flic(PcxFilePath);
-            Console.WriteLine(MyAnimation.Width);
-            Console.WriteLine(MyAnimation.Height);
 
             // Create ImageSharp color Palette
             Rgba32[] ISPalette = new Rgba32[256]; 
