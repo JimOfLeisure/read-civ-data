@@ -49,6 +49,9 @@ public class Civ3Media : Node2D
         TileSet TS = new TileSet();
         TM.TileSet = TS;
 
+        int id = TS.GetLastUnusedTileId();
+        TS.CreateTile(id);
+
         Pcx PcxTxtr = new Pcx(Civ3Path + "/Art/Terrain/xpgc.pcx");
         Image ImgTxtr = ByteArrayToImage(PcxTxtr.Image, PcxTxtr.Palette, PcxTxtr.Width, PcxTxtr.Height);
         ImageTexture Txtr = new ImageTexture();
@@ -56,7 +59,21 @@ public class Civ3Media : Node2D
         Txtr.CreateFromImage(ImgTxtr, 0);
         // TODO: figure out what significance id parameter is
         TS.TileSetTexture(0, Txtr);
+        TS.TileSetRegion(0, new Rect2(new Vector2(0,0), new Vector2(PcxTxtr.Width, PcxTxtr.Height)));
+        TS.TileSetTileMode(0, TileSet.TileMode.AtlasTile);
         TS.AutotileSetSize(0, new Vector2(128,64));
+
+        // ResourceSaver.Save("tileset.tres", TS);
+        // FIXME: None of the following seems to place tiles
+        TM.SetCellv(new Vector2(10,10), 0);
+        for (int y = 0; y < 20; y++) {
+            for (int x = 0; x < 20; x++) {
+                try {
+                TM.SetCellv(new Vector2(x, y), x + y * 20);
+                } catch { GD.Print(x + y * 20); }
+            }
+        }
+        GD.Print(TS.GetTilesIds());
         AddChild(TM);
     }
     Image ByteArrayToImage(byte[] ba, byte[,] palette, int width, int height) {
