@@ -9,6 +9,166 @@ namespace ReadCivData.ConvertCiv3Media
     // Not intended to be a generalized/universal Flic reader
     // Implementing from description at https://www.drdobbs.com/windows/the-flic-file-format/184408954
     public class Flic {
+        byte[][] Images;
+        // All animations/images have same palette, height, and width
+        public byte[,] Palette = new byte[256,3];
+        public int Width = 0;
+        public int Height = 0;
+
+        // constructors
+        public Flic(){}
+        public Flic(string path) {
+            this.Load(path);
+        }
+        public void Load(string path) {
+            byte[] FlicBytes = File.ReadAllBytes(path);
+
+            int FileFormat = BitConverter.ToUInt16(FlicBytes, 4);
+            // Should be 0xAF12
+            // Console.WriteLine(String.Format("0x{0:X04}", FileFormat));
+
+            // TODO: this may not be right for Civ3 FLCs
+            int NumFrames = BitConverter.ToUInt16(FlicBytes, 6);
+            this.Width = BitConverter.ToUInt16(FlicBytes, 8);
+            this.Height = BitConverter.ToUInt16(FlicBytes, 10);
+            int ImageLength = this.Width * this.Height;
+
+            // Initialize image frames
+            this.Images = new byte[NumFrames][];
+            Array.ForEach(this.Images, Image => Image = new byte[this.Width * this.Height]);
+
+            // technically should be UInt32 I think
+            // frame 1 chunk offset
+            int Offset = BitConverter.ToInt32(FlicBytes, 80);
+            bool PaletteIsFilled = false;
+            // FIXME: The following two result in different numbers of frames processed!
+            // for (; Offset < FlicBytes.Length;) {
+            for (int f = 0; f < NumFrames; f++) {
+                // Frame chunk headers should be 0xF1Fa; prefix chunk header is 0xF100
+                int ChunkLength = BitConverter.ToInt32(FlicBytes, Offset);
+                int Chunktype = BitConverter.ToUInt16(FlicBytes, Offset + 4);
+                int NumSubChunks = BitConverter.ToUInt16(FlicBytes, Offset + 6);
+
+                bool ImageReady = false;
+                for (int i = 0, SubOffset = Offset + 16; i < NumSubChunks; i++) {
+                    int SubChunkLength = BitConverter.ToInt32(FlicBytes, SubOffset);
+                    int SubChunkType = BitConverter.ToUInt16(FlicBytes, SubOffset + 4);
+                    byte[,] PixelArray = new byte[Width, Height];
+                    switch (SubChunkType) {
+                        case 4:
+                            int NumPackets = BitConverter.ToUInt16(FlicBytes, SubOffset + 6);
+                            if (NumPackets != 1) {
+                                throw new ArgumentException("Unable to deal with color palette with more than one packet; NumPackets = " + NumPackets);
+                            }
+                            int SkipCount = BitConverter.GetBytes(BitConverter.ToChar(FlicBytes, SubOffset + 8))[0];
+                            if (SkipCount != 0) {
+                                throw new ArgumentException("Unable to deal with color palette with non-zero SkipCount = " + SkipCount);
+                            }
+                            for (int p = 0; p < 256; p++) {
+                                // Have to explicitly cast byte or it may use the normalized float constructor instead
+                                Palette[p] = new Rgba32(
+                                    (byte)FlicBytes[8 + SubOffset + p * 3],
+                                    (byte)FlicBytes[8 + SubOffset + p * 3 + 1],
+                                    (byte)FlicBytes[8 + SubOffset + p * 3 + 2],
+                                    Array.Exists<int>(transparent, e => e == p) ? (byte)0 : (byte)255
+                                );
+                                // Trying out shadows, but this only works on units I think
+                                // These shadows look good on units!
+                                for (int foo = 240; foo < 256; foo++) {
+                                    Palette[foo] = new Rgba32(0,0,0,(byte)((255 - foo) *16));
+                                }
+                            }
+                            PaletteIsFilled = true;
+                            break;
+                        case 15:
+                            // Assuming only one 15 subchunk per frame
+                            // first frame has pixel subchunk before palette subchunk, so will extract to temp byte array
+                            for (int y = 0, x = 0, head = SubOffset + 6; y < Height; y++, x = 0) {
+                                // first byte of row is obsolete
+                                head++;
+                                for (; x < Width;) {
+                                    int TypeSize = (sbyte)FlicBytes[head];
+                                    if (TypeSize == 0) {
+                                        throw new ApplicationException("TypeSize is 0");
+                                    }
+                                    if (TypeSize > 0) {
+                                        head++;
+                                        for (int foo = 0; foo < Math.Abs(TypeSize); foo++) {
+                                            PixelArray[x,y] = FlicBytes[head];
+                                            x++;
+                                        }
+                                        head++;
+                                    } else {
+                                        head++;
+                                        for (int foo = 0; foo < Math.Abs(TypeSize); foo++) {
+                                            PixelArray[x,y] = FlicBytes[head];
+                                            head++;
+                                            x++;
+                                        }
+                                    }
+                                }
+                            }
+                            ImageReady = true;
+                            break;
+                        case 7:
+                            // Copy last frame image
+                            OutImages[f] = OutImages[f-1].CloneAs<Rgba32>();
+                            int NumLines = BitConverter.ToUInt16(FlicBytes, SubOffset + 6);
+                            for (int Line = 0, y = 0, head = SubOffset + 8; Line < NumLines; Line++) {
+                                int WordsPerLine = BitConverter.ToInt16(FlicBytes, head);
+                                head += 2;
+                                // skip lines?
+                                if ((WordsPerLine & 0xc00) == 0xc00) {
+                                    y += Math.Abs(WordsPerLine);
+                                    WordsPerLine = BitConverter.ToInt16(FlicBytes, head);
+                                    head+=2;
+                                }
+                                // Last pixel for odd-length lines?
+                                // This may not have been tested; none of my Flics change the last pixel
+                                if ((WordsPerLine & 0x800) == 0x800) {
+                                    OutImages[f][Width - 1, y] = Palette[(byte)(WordsPerLine & 0xff)];
+                                    WordsPerLine = BitConverter.ToInt16(FlicBytes, head);
+                                    head+=2;
+                                }
+                                if ((WordsPerLine & 0xc00) != 0) {
+                                    throw new ApplicationException("WordsPerLine high bits set: " + WordsPerLine);
+                                }
+                                for (int packet = 0, x = 0; packet < WordsPerLine; packet++) {
+                                    // column skip
+                                    x += FlicBytes[head];
+                                    head++;
+                                    int NumWords = (sbyte)FlicBytes[head];
+                                    bool Positive = NumWords > 0;
+                                    head++;
+                                    for (int ii = 0; ii < Math.Abs(NumWords); ii++) {
+                                        OutImages[f][x,y] = Palette[FlicBytes[head]];
+                                        OutImages[f][x+1,y] = Palette[FlicBytes[head+1]];
+                                        if (Positive) { head += 2; }
+                                        x += 2;
+                                    }
+                                    if (! Positive) { head += 2; }
+                                }
+                                y++;
+                            }
+                            break;
+                        default:
+                            // Console.WriteLine("Subchunk not recognized: " + SubChunkType);
+                            break;
+                    }
+                    if (PaletteIsFilled && ImageReady) {
+                        for (int y = 0; y < Height; y++) {
+                            for (int x = 0; x < Width; x++) {
+                                OutImages[f][x,y] = Palette[PixelArray[x,y]];
+                            }
+                        }
+                        ImageReady = false;
+                    }
+                    SubOffset += SubChunkLength;
+                }
+                Offset += ChunkLength;
+            }
+
+        }
         static public Image<Rgba32>[] Read(byte[] inFlic, int[] transparent) {
             int FileFormat = BitConverter.ToUInt16(inFlic, 4);
             // Should be 0xAF12

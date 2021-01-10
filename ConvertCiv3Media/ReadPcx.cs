@@ -32,7 +32,6 @@ namespace ReadCivData.ConvertCiv3Media
 
             this.Width = RightMargin - LeftMargin;
             this.Height = BottomMargin - TopMargin;
-            int ImageLength = BytesPerLine * Height;
             // Palette is 256*3 bytes at end of file
             int PaletteOffset = PcxBytes.Length - 768;
 
