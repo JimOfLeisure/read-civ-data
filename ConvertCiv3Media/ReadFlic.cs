@@ -39,7 +39,9 @@ namespace ReadCivData.ConvertCiv3Media
             int ImageLength = this.Width * this.Height;
 
             // Initialize image frames
-            this.Images = new byte[NumFrames][];
+            // this.Images = new byte[NumFrames][];
+            // FIXME: hack to get to 88 frames
+            this.Images = new byte[NumFrames + 8][];
             for (int i = 0; i < this.Images.Length; i++) {
                 this.Images[i] = new byte[this.Width * this.Height];
             }
@@ -50,8 +52,8 @@ namespace ReadCivData.ConvertCiv3Media
             // bool PaletteIsFilled = false;
             // Flic frames loop
             // FIXME: The following two result in different numbers of frames processed!
-            // for (; Offset < FlicBytes.Length;) {
-            for (int f = 0; f < NumFrames; f++) {
+            for (int f = 0; Offset < FlicBytes.Length; f++) {
+            // for (int f = 0; f < NumFrames; f++) {
                 // Frame chunk headers should be 0xF1Fa; prefix chunk header is 0xF100
                 int ChunkLength = BitConverter.ToInt32(FlicBytes, Offset);
                 int Chunktype = BitConverter.ToUInt16(FlicBytes, Offset + 4);
