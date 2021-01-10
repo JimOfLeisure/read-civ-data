@@ -40,7 +40,7 @@ namespace ReadCivData.ConvertCiv3Media
             // technically should be UInt32 I think
             // frame 1 chunk offset
             int Offset = BitConverter.ToInt32(FlicBytes, 80);
-            bool PaletteIsFilled = false;
+            // bool PaletteIsFilled = false;
             // FIXME: The following two result in different numbers of frames processed!
             // for (; Offset < FlicBytes.Length;) {
             for (int f = 0; f < NumFrames; f++) {
@@ -49,11 +49,11 @@ namespace ReadCivData.ConvertCiv3Media
                 int Chunktype = BitConverter.ToUInt16(FlicBytes, Offset + 4);
                 int NumSubChunks = BitConverter.ToUInt16(FlicBytes, Offset + 6);
 
-                bool ImageReady = false;
+                // bool ImageReady = false;
                 for (int i = 0, SubOffset = Offset + 16; i < NumSubChunks; i++) {
                     int SubChunkLength = BitConverter.ToInt32(FlicBytes, SubOffset);
                     int SubChunkType = BitConverter.ToUInt16(FlicBytes, SubOffset + 4);
-                    byte[,] PixelArray = new byte[Width, Height];
+                    // byte[,] PixelArray = new byte[Width, Height];
                     switch (SubChunkType) {
                         case 4:
                             int NumPackets = BitConverter.ToUInt16(FlicBytes, SubOffset + 6);
@@ -69,7 +69,7 @@ namespace ReadCivData.ConvertCiv3Media
                                 this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3 + 1];
                                 this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3 + 2];
                             }
-                            PaletteIsFilled = true;
+                            // PaletteIsFilled = true;
                             break;
                         case 15:
                             // Assuming only one 15 subchunk per frame
@@ -85,21 +85,23 @@ namespace ReadCivData.ConvertCiv3Media
                                     if (TypeSize > 0) {
                                         head++;
                                         for (int foo = 0; foo < Math.Abs(TypeSize); foo++) {
-                                            PixelArray[x,y] = FlicBytes[head];
+                                            // PixelArray[x,y] = FlicBytes[head];
+                                            this.Images[f][y * this.Width + x] = FlicBytes[head];
                                             x++;
                                         }
                                         head++;
                                     } else {
                                         head++;
                                         for (int foo = 0; foo < Math.Abs(TypeSize); foo++) {
-                                            PixelArray[x,y] = FlicBytes[head];
+                                            // PixelArray[x,y] = FlicBytes[head];
+                                            this.Images[f][y * this.Width + x] = FlicBytes[head];
                                             head++;
                                             x++;
                                         }
                                     }
                                 }
                             }
-                            ImageReady = true;
+                            // ImageReady = true;
                             break;
                         case 7:
                             // Copy last frame image
@@ -149,6 +151,7 @@ namespace ReadCivData.ConvertCiv3Media
                             // Console.WriteLine("Subchunk not recognized: " + SubChunkType);
                             break;
                     }
+                    /*
                     if (PaletteIsFilled && ImageReady) {
                         for (int y = 0; y < Height; y++) {
                             for (int x = 0; x < Width; x++) {
@@ -157,12 +160,13 @@ namespace ReadCivData.ConvertCiv3Media
                         }
                         ImageReady = false;
                     }
+                    */
                     SubOffset += SubChunkLength;
                 }
                 Offset += ChunkLength;
             }
-
         }
+        /*
         static public Image<Rgba32>[] Read(byte[] inFlic, int[] transparent) {
             int FileFormat = BitConverter.ToUInt16(inFlic, 4);
             // Should be 0xAF12
@@ -325,5 +329,6 @@ namespace ReadCivData.ConvertCiv3Media
                 }
             }
         }
+        */
     }
 }
