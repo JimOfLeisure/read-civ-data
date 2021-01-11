@@ -15,6 +15,7 @@ public class Civ3Media : Node2D
         // this.TerrainAsSprites();
         this.TerrainAsTileMap();
         // this.TerrainAsAtlasTileMap();
+        this.AnimatedSpritePlay();
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -126,5 +127,28 @@ public class Civ3Media : Node2D
         OutImage.Unlock();
 
         return OutImage;
+    }
+    public void AnimatedSpritePlay() {
+        AnimatedSprite AS = new AnimatedSprite();
+        AS.Position = new Vector2(128 * 3, 64 * 3 - 12);
+        SpriteFrames SF = new SpriteFrames();
+        AS.Frames = SF;
+        AddChild(AS);
+
+        SF.AddAnimation("Run SW");
+        SF.SetAnimationSpeed("Run SW", 15);
+
+        Flic Unit = new Flic(Civ3Path + "/Art/Units/warrior/warriorRun.flc");
+        for (int i = 0; i < 10; i++) {
+            Image ImgTxtr = ByteArrayToImage(Unit.Images[i], Unit.Palette, Unit.Width, Unit.Height);
+            ImageTexture Txtr = new ImageTexture();
+            // TODO: parametrize flags parameter
+            Txtr.CreateFromImage(ImgTxtr, 0);
+            SF.AddFrame("Run SW", Txtr);
+        }
+        GD.Print(SF.GetFrameCount("Run SW"));
+        GD.Print(AS.IsPlaying());
+        AS.Play("Run SW");
+        GD.Print(AS.IsPlaying());
     }
 }
