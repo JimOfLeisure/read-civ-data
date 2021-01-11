@@ -141,12 +141,12 @@ public class Civ3Media : Node2D
         SF.SetAnimationSpeed("Run SW", 15);
 
         Flic Unit = new Flic(Civ3Path + "/Art/Units/warrior/warriorRun.flc");
-        Pcx UnitPal = new Pcx(Civ3Path + "/Art/Units/Palettes/ntp01.pcx");
+        Pcx UnitPal = new Pcx(Civ3Path + "/Art/Units/Palettes/ntp00.pcx");
         byte[,] CivColorUnitPal = new byte[256,3];
         for (int i = 0, foo = 64; i < 256; i++) {
             byte[,] TempPal = i < foo ?  UnitPal.Palette : Unit.Palette ;
             for (int j = 0; j < 3; j++) {
-                CivColorUnitPal[i,j] = TempPal[i < foo ? i : i - foo, j];
+                CivColorUnitPal[i,j] = TempPal[i < foo ? i : i, j];
             }
         }
         for (int i = 0; i < 10; i++) {
