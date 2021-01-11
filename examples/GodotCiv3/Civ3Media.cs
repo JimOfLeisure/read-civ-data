@@ -131,6 +131,8 @@ public class Civ3Media : Node2D
     public void AnimatedSpritePlay() {
         AnimatedSprite AS = new AnimatedSprite();
         AS.Position = new Vector2(128 * 3, 64 * 3 - 12);
+        // temporarily making it bigger
+        AS.Scale = new Vector2(4, 4);
         SpriteFrames SF = new SpriteFrames();
         AS.Frames = SF;
         AddChild(AS);
@@ -139,8 +141,16 @@ public class Civ3Media : Node2D
         SF.SetAnimationSpeed("Run SW", 15);
 
         Flic Unit = new Flic(Civ3Path + "/Art/Units/warrior/warriorRun.flc");
+        Pcx UnitPal = new Pcx(Civ3Path + "/Art/Units/Palettes/ntp01.pcx");
+        byte[,] CivColorUnitPal = new byte[256,3];
+        for (int i = 0, foo = 64; i < 256; i++) {
+            byte[,] TempPal = i < foo ?  UnitPal.Palette : Unit.Palette ;
+            for (int j = 0; j < 3; j++) {
+                CivColorUnitPal[i,j] = TempPal[i < foo ? i : i - foo, j];
+            }
+        }
         for (int i = 0; i < 10; i++) {
-            Image ImgTxtr = ByteArrayToImage(Unit.Images[i], Unit.Palette, Unit.Width, Unit.Height);
+            Image ImgTxtr = ByteArrayToImage(Unit.Images[i], CivColorUnitPal, Unit.Width, Unit.Height);
             ImageTexture Txtr = new ImageTexture();
             // TODO: parametrize flags parameter
             Txtr.CreateFromImage(ImgTxtr, 0);
