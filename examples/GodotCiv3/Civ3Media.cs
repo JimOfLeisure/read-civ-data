@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using ReadCivData.ConvertCiv3Media;
 
 public class Civ3Media : Node2D
@@ -8,7 +8,7 @@ public class Civ3Media : Node2D
     [Export(PropertyHint.Dir)]
     public string Civ3Path;
     int[,] Map;
-    Dictionary<int[], int> Terrmask = new Dictionary<int[], int>();
+    Hashtable Terrmask = new Hashtable();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -67,12 +67,12 @@ public class Civ3Media : Node2D
                 TS.TileSetTexture(id, Txtr);
                 TS.TileSetRegion(id, new Rect2(x, y, 128, 64));
                 // order right, bottom, left, top; 0 is plains, 1 grass, 2 coast
-                Terrmask.Add(new int[]{
-                    (y / 64) % 3,
-                    (y / 64) % 9,
-                    (x / 128) % 9,
-                    (x / 128) % 3
-                }, id);
+                Terrmask.Add(
+                    ((y / 64) % 3).ToString("D3") +
+                    ((y / 64) % 9).ToString("D3") +
+                    ((x / 128) % 9).ToString("D3") +
+                    ((x / 128) % 3).ToString("D3")
+                    , id);
             }
         }
 
@@ -90,7 +90,7 @@ public class Civ3Media : Node2D
             for (int x = 1; x < mywidth; x+=2) {
                 // If x & y are both even or odd, terrain value; if mismatched, terrain mask init to 0
                 try {
-                Map[x,y] = Terrmask[new int[]{1,1,1,1}];
+                Map[x,y] = (int)Terrmask["001001001001"];
                 } catch { GD.Print(x + "," + y); }
             }
         }
