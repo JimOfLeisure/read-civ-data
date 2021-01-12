@@ -153,13 +153,20 @@ public class Civ3Media : Node2D
         GD.Print(TS.GetTilesIds());
         AddChild(TM);
     }
-    Image ByteArrayToImage(byte[] ba, byte[,] palette, int width, int height) {
+    Image ByteArrayToImage(byte[] ba, byte[,] palette, int width, int height, int[] transparent = null, bool shadows = false) {
         Image OutImage = new Image();
         OutImage.Create(width, height, false, Image.Format.Rgba8);
         OutImage.Lock();
         for (int i = 0; i < width * height; i++)
         {
-            OutImage.SetPixel(i % width, i / width, Color.Color8(palette[ba[i],0], palette[ba[i],1], palette[ba[i],2], ba[i] == 255 ? (byte)0 : (byte)255));
+            if (shadows && ba[i] > 239) {
+                // using black and transparency
+                // OutImage.SetPixel(i % width, i / width, Color.Color8(0,0,0, (byte)((255 -ba[i]) * 16)));
+                // using the palette color but adding transparency
+                OutImage.SetPixel(i % width, i / width, Color.Color8(palette[ba[i],0], palette[ba[i],1], palette[ba[i],2], (byte)((255 -ba[i]) * 16)));
+            } else {
+                OutImage.SetPixel(i % width, i / width, Color.Color8(palette[ba[i],0], palette[ba[i],1], palette[ba[i],2], ba[i] == 255 ? (byte)0 : (byte)255));
+            }
         }
         OutImage.Unlock();
 
@@ -187,10 +194,10 @@ public class Civ3Media : Node2D
             }
         }
         for (int i = 0; i < 10; i++) {
-            Image ImgTxtr = ByteArrayToImage(Unit.Images[i], CivColorUnitPal, Unit.Width, Unit.Height);
+            Image ImgTxtr = ByteArrayToImage(Unit.Images[i], CivColorUnitPal, Unit.Width, Unit.Height, shadows: true);
             ImageTexture Txtr = new ImageTexture();
             // TODO: parametrize flags parameter
-            Txtr.CreateFromImage(ImgTxtr, 0);
+            Txtr.CreateFromImage(ImgTxtr, 7);
             SF.AddFrame("Run SW", Txtr);
         }
         // GD.Print(SF.GetFrameCount("Run SW"));
