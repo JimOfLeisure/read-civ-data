@@ -69,8 +69,8 @@ public class Civ3Media : Node2D
                 // order right, bottom, left, top; 0 is plains, 1 grass, 2 coast
                 Terrmask.Add(
                     ((y / 64) % 3).ToString("D3") +
-                    ((y / 64) % 9).ToString("D3") +
-                    ((x / 128) % 9).ToString("D3") +
+                    ((y / 64) / 3 % 3).ToString("D3") +
+                    ((x / 128) / 3 % 3).ToString("D3") +
                     ((x / 128) % 3).ToString("D3")
                     , id);
             }
