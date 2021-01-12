@@ -86,11 +86,17 @@ public class Civ3Media : Node2D
             }
         }
         // Loop to lookup tile ids based on terrain mask
-        for (int y = 0; y < myheight; y++) {
+        for (int y = 1; y < myheight - 1; y++) {
             for (int x = 1; x < mywidth; x+=2) {
                 // If x & y are both even or odd, terrain value; if mismatched, terrain mask init to 0
                 try {
-                Map[x,y] = (int)Terrmask["001001001001"];
+                // Map[x,y] = (int)Terrmask["001001001001"];
+                Map[x,y] = (int)Terrmask[
+                    (Map[(x+1) % mywidth,y]).ToString("D3") +
+                    (Map[x,y+1]).ToString("D3") +
+                    (Map[(x-1) % mywidth,y]).ToString("D3") +
+                    (Map[x,y-1]).ToString("D3")
+                ];
                 } catch { GD.Print(x + "," + y); }
             }
         }
