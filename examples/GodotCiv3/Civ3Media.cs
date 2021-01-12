@@ -105,7 +105,7 @@ public class Civ3Media : Node2D
             for (int x = 1; x < mywidth; x+=2) {
                 // TM.SetCellv(new Vector2(x + (y % 2), y), (new Random()).Next() % TS.GetTilesIds().Count);
                 // try {
-                TM.SetCellv(new Vector2(x + (y % 2), y), Map[x,y]);
+                TM.SetCellv(new Vector2(x + 1 - (y % 2), y), Map[x,y]);
                 // } catch {}
             }
         }
