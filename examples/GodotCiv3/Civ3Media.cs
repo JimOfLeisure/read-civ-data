@@ -1,11 +1,14 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using ReadCivData.ConvertCiv3Media;
 
 public class Civ3Media : Node2D
 {
     [Export(PropertyHint.Dir)]
     public string Civ3Path;
+    int[,] Map;
+    Dictionary<int[], int> Terrmask = new Dictionary<int[], int>();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -63,13 +66,41 @@ public class Civ3Media : Node2D
                 TS.CreateTile(id);
                 TS.TileSetTexture(id, Txtr);
                 TS.TileSetRegion(id, new Rect2(x, y, 128, 64));
+                // order right, bottom, left, top; 0 is plains, 1 grass, 2 coast
+                Terrmask.Add(new int[]{
+                    (y / 64) % 3,
+                    (y / 64) % 9,
+                    (x / 128) % 9,
+                    (x / 128) % 3
+                }, id);
             }
         }
 
-        int mywidth = 14;
-        for (int y = 0; y < mywidth; y++) {
-            for (int x = 0; x < mywidth; x+=2) {
-                TM.SetCellv(new Vector2(x + (y % 2), y), (new Random()).Next() % TS.GetTilesIds().Count);
+        int mywidth = 14, myheight = 14;
+        Map = new int[mywidth,myheight];
+        // Populate map values, 0 out terrain mask
+        for (int y = 0; y < myheight; y++) {
+            for (int x = 0; x < mywidth; x++) {
+                // If x & y are both even or odd, terrain value; if mismatched, terrain mask init to 0
+                Map[x,y] = x%2 - y%2 == 0 ? (new Random()).Next() % 3 : 0;
+            }
+        }
+        // Loop to lookup tile ids based on terrain mask
+        for (int y = 0; y < myheight; y++) {
+            for (int x = 1; x < mywidth; x+=2) {
+                // If x & y are both even or odd, terrain value; if mismatched, terrain mask init to 0
+                try {
+                Map[x,y] = Terrmask[new int[]{1,1,1,1}];
+                } catch { GD.Print(x + "," + y); }
+            }
+        }
+        // loop to place tiles, each of which contains 1/4 of 4 'real' map locations
+        for (int y = 0; y < myheight; y++) {
+            for (int x = 1; x < mywidth; x+=2) {
+                // TM.SetCellv(new Vector2(x + (y % 2), y), (new Random()).Next() % TS.GetTilesIds().Count);
+                // try {
+                TM.SetCellv(new Vector2(x + (y % 2), y), Map[x,y]);
+                // } catch {}
             }
         }
         AddChild(TM);
