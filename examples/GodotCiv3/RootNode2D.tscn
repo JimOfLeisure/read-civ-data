@@ -7,4 +7,4 @@ script = ExtResource( 1 )
 __meta__ = {
 "_editor_description_": "	"
 }
-Civ3Path = "/Volumes/minio-storage/steamapps/steamapps/common/Sid Meier's Civilization III Complete"
+Civ3Path = "/Volumes/minio-storage/civ3"
