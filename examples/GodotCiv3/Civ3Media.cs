@@ -75,6 +75,10 @@ public class Civ3Media : Node2D
                     , id);
             }
         }
+        foreach(DictionaryEntry de in Terrmask) {
+            GD.Print(de.Key);
+        }
+        GD.Print(Terrmask.Count);
 
         int mywidth = 14, myheight = 14;
         Map = new int[mywidth,myheight];
@@ -82,30 +86,30 @@ public class Civ3Media : Node2D
         for (int y = 0; y < myheight; y++) {
             for (int x = 0; x < mywidth; x++) {
                 // If x & y are both even or odd, terrain value; if mismatched, terrain mask init to 0
-                Map[x,y] = x%2 - y%2 == 0 ? (new Random()).Next() % 3 : 0;
+                Map[x,y] = x%2 - y%2 == 0 ? (new Random()).Next(0,3) : 0;
             }
         }
         // Loop to lookup tile ids based on terrain mask
         for (int y = 1; y < myheight - 1; y++) {
-            for (int x = 1; x < mywidth; x+=2) {
-                // If x & y are both even or odd, terrain value; if mismatched, terrain mask init to 0
-                try {
-                // Map[x,y] = (int)Terrmask["001001001001"];
-                Map[x,y] = (int)Terrmask[
+            for (int x = (1 - (y % 2)); x < mywidth; x+=2) {
+                string foo = 
                     (Map[(x+1) % mywidth,y]).ToString("D3") +
                     (Map[x,y+1]).ToString("D3") +
-                    (Map[(x-1) % mywidth,y]).ToString("D3") +
+                    (Map[Mathf.Abs((x-1) % mywidth),y]).ToString("D3") +
                     (Map[x,y-1]).ToString("D3")
-                ];
-                } catch { GD.Print(x + "," + y); }
+                ;
+                try {
+                // Map[x,y] = (int)Terrmask["001001001001"];
+                Map[x,y] = (int)Terrmask[foo];
+                } catch { GD.Print(x + "," + y + " " + foo); }
             }
         }
         // loop to place tiles, each of which contains 1/4 of 4 'real' map locations
-        for (int y = 0; y < myheight; y++) {
-            for (int x = 1; x < mywidth; x+=2) {
+        for (int y = 1; y < myheight - 1; y++) {
+            for (int x = 1 - (y%2); x < mywidth; x+=2) {
                 // TM.SetCellv(new Vector2(x + (y % 2), y), (new Random()).Next() % TS.GetTilesIds().Count);
                 // try {
-                TM.SetCellv(new Vector2(x + 1 - (y % 2), y), Map[x,y]);
+                TM.SetCellv(new Vector2(x, y), Map[x,y]);
                 // } catch {}
             }
         }
@@ -134,8 +138,6 @@ public class Civ3Media : Node2D
         TS.TileSetTileMode(0, TileSet.TileMode.AtlasTile);
         TS.AutotileSetSize(0, new Vector2(128,64));
         TS.TileSetRegion(0, new Rect2(new Vector2(0,0), new Vector2(PcxTxtr.Width / 128 * 128, PcxTxtr.Height / 64 * 64)));
-        GD.Print(TS.TileGetRegion(0));
-        GD.Print(TS.AutotileGetSize(0));
         // TS._ForwardAtlasSubtileSelection()
         // ResourceSaver.Save("tileset.tres", TS);
         // FIXME: None of the following seems to place tiles
@@ -193,9 +195,9 @@ public class Civ3Media : Node2D
             Txtr.CreateFromImage(ImgTxtr, 0);
             SF.AddFrame("Run SW", Txtr);
         }
-        GD.Print(SF.GetFrameCount("Run SW"));
-        GD.Print(AS.IsPlaying());
+        // GD.Print(SF.GetFrameCount("Run SW"));
+        // GD.Print(AS.IsPlaying());
         AS.Play("Run SW");
-        GD.Print(AS.IsPlaying());
+        // GD.Print(AS.IsPlaying());
     }
 }
