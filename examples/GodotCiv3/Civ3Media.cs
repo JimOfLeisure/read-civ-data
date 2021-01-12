@@ -75,10 +75,6 @@ public class Civ3Media : Node2D
                     , id);
             }
         }
-        foreach(DictionaryEntry de in Terrmask) {
-            GD.Print(de.Key);
-        }
-        GD.Print(Terrmask.Count);
 
         int mywidth = 14, myheight = 14;
         Map = new int[mywidth,myheight];
@@ -90,13 +86,15 @@ public class Civ3Media : Node2D
             }
         }
         // Loop to lookup tile ids based on terrain mask
-        for (int y = 1; y < myheight - 1; y++) {
+        for (int y = 0; y < myheight; y++) {
             for (int x = (1 - (y % 2)); x < mywidth; x+=2) {
+                int Top = y == 0 ? (Map[(x+1) % mywidth,y]) : (Map[x,y-1]);
+                int Bottom = y == myheight - 1 ? (Map[(x+1) % mywidth,y]) : (Map[x,y+1]);
                 string foo = 
                     (Map[(x+1) % mywidth,y]).ToString("D3") +
-                    (Map[x,y+1]).ToString("D3") +
+                    Bottom.ToString("D3") +
                     (Map[Mathf.Abs((x-1) % mywidth),y]).ToString("D3") +
-                    (Map[x,y-1]).ToString("D3")
+                    Top.ToString("D3")
                 ;
                 try {
                 // Map[x,y] = (int)Terrmask["001001001001"];
@@ -105,7 +103,7 @@ public class Civ3Media : Node2D
             }
         }
         // loop to place tiles, each of which contains 1/4 of 4 'real' map locations
-        for (int y = 1; y < myheight - 1; y++) {
+        for (int y = 0; y < myheight; y++) {
             for (int x = 1 - (y%2); x < mywidth; x+=2) {
                 // TM.SetCellv(new Vector2(x + (y % 2), y), (new Random()).Next() % TS.GetTilesIds().Count);
                 // try {
