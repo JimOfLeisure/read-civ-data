@@ -47,6 +47,7 @@ namespace ReadCivData.ConvertCiv3Media
         PauseIRRIGATE      
 
     }
+    // will probably make these to-override methods in Civ3UnitSprite instead
     public interface ISprite {
         void Animation(Action action, Direction direction);
         void Play();
@@ -56,10 +57,10 @@ namespace ReadCivData.ConvertCiv3Media
         // public void SetLocation(int x, int y);
     }
     public class Civ3UnitSprite {
+        // TODO: handle mismatched cases in ini file .. maybe try INI then ini ?
         public Civ3UnitSprite(string path) {
             FileIniDataParser UnitIniFile = new FileIniDataParser();
             IniData UnitIniData = UnitIniFile.ReadFile(path);
-            Console.WriteLine(UnitIniData["Animations"][Action.RUN.ToString()]);
             foreach (Action item in Enum.GetValues(typeof(Action))) {
                 if (UnitIniData["Animations"][item.ToString()] != "") {
                     Console.WriteLine(UnitIniData["Animations"][item.ToString()]);

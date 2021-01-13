@@ -3,6 +3,7 @@ sav/
 *.pcx
 *.flc
 .vscode/
+*.bin
 
 *.swp
 *.*~
