@@ -5,28 +5,13 @@ $Civ3Root = '/Volumes/minio-storage/civ3'
 $IniPath = $Civ3Root + '/Art/Units/warrior/Warrior.INI'
 
 Add-Type -Path ($NugetPath + '/ini-parser/3.4.0/lib/net20/INIFileParser.dll')
+<#
 
 $parser = New-Object IniParser.FileIniDataParser
 $data = $parser.ReadFile($IniPath)
 $data.Sections["Animations"] | Select-Object KeyName, Value | Format-List
+#>
 
-$foo = Add-Type -Language CSharp -TypeDefinition @"
-namespace Foo {
-    public class Doot {
-        public enum Direction {
-            SW,
-            S,
-            SE,
-            E,
-            NE,
-            N,
-            NW,
-            W
-        }
-    }
-}
-"@ -PassThru
+Add-Type -Path ('bin/Debug/netstandard2.0/ReadCivData.ConvertCiv3Media.dll')
 
-
-
-[Foo.Doot+Direction]::E + 100
+$foo = New-Object ReadCivData.ConvertCiv3Media.Civ3UnitSprite($IniPath)
