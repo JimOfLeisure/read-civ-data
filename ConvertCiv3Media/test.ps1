@@ -1,12 +1,12 @@
-Add-Type  -Path '/Users/jim/.nuget/packages/sixlabors.imagesharp/1.0.2/lib/netstandard2.0/SixLabors.ImageSharp.dll'
-Add-Type  -Path '/Users/jim/code/src/dotnet/read-civ-data/ConvertCiv3Media/bin/Debug/netstandard2.0/ReadCivData.ConvertCiv3Media.dll'
+# Testing the ini-parser NuGet package against unit ini files
 
-# [ReadCivData.ConvertCiv3Media.Flic]::SaveOutPngs()
-# [ReadCivData.ConvertCiv3Media.Pcx]::SaveOutPng()
+$NugetPath = '/Users/jim/.nuget/packages'
+$Civ3Root = '/Volumes/minio-storage/civ3'
+$IniPath = $Civ3Root + '/Art/Units/warrior/Warrior.INI'
 
-$foo = New-Object ReadCivData.ConvertCiv3Media.Pcx("/Users/jim/code/src/tmp/Godot/civ3play/temp/popHeads-ORIG.pcx")
+Add-Type -Path ($NugetPath + '/ini-parser/3.4.0/lib/net20/INIFileParser.dll')
 
-$foo.Palette.Count
-$foo.Image.Count
-$foo.Width
-$foo.Height
+
+$parser = New-Object IniParser.FileIniDataParser
+$data = $parser.ReadFile($IniPath)
+$data.Sections["Animations"] | Format-List
