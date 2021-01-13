@@ -60,6 +60,14 @@ namespace ReadCivData.ConvertCiv3Media
             FileIniDataParser UnitIniFile = new FileIniDataParser();
             IniData UnitIniData = UnitIniFile.ReadFile(path);
             Console.WriteLine(UnitIniData["Animations"][Action.RUN.ToString()]);
+            foreach (Action item in Enum.GetValues(typeof(Action))) {
+                if (UnitIniData["Animations"][item.ToString()] != "") {
+                    Console.WriteLine(UnitIniData["Animations"][item.ToString()]);
+                }
+            }
+            {
+                
+            }
         }
     }
 }
