@@ -58,12 +58,27 @@ namespace ReadCivData.ConvertCiv3Media
     }
     public class Civ3UnitSprite {
         // TODO: handle mismatched cases in ini file .. maybe try INI then ini ?
-        public Civ3UnitSprite(string path) {
+        public Civ3UnitSprite(string unitPath) {
+            // TODO: Parameterize this and/or take ini path and chop it up
+            string UnitIniPath = unitPath + "Warrior.INI";
             FileIniDataParser UnitIniFile = new FileIniDataParser();
-            IniData UnitIniData = UnitIniFile.ReadFile(path);
+            IniData UnitIniData = UnitIniFile.ReadFile(unitPath);
+
+            // TODO: Fix this total hack
+            string[] foo = unitPath.Split(new char[]{'/','\\'});
+            foo[foo.Length-2] = "Palettes";
+            foo[foo.Length-1] = "ntp00.pcx";
+            Console.WriteLine(String.Join("/", foo));
+            Pcx UnitPal = new Pcx(String.Join("/", foo));
+
+            // TODO: Fix this total hack
+            string[] bar = unitPath.Split(new char[]{'/','\\'});
             foreach (Action item in Enum.GetValues(typeof(Action))) {
                 if (UnitIniData["Animations"][item.ToString()] != "") {
                     Console.WriteLine(UnitIniData["Animations"][item.ToString()]);
+                    bar[bar.Length-1] = UnitIniData["Animations"][item.ToString()];
+                    Flic Animation = new Flic(String.Join("/", bar));
+
                 }
             }
             {
