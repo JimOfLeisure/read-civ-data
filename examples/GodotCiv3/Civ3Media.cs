@@ -209,13 +209,23 @@ public class Civ3Media : Node2D
     // using an in-development non-Godot-specific object for unit media
     public void MoreUnitSpritePlay() {
         Civ3Unit MyUnit = new Civ3Unit(Civ3Path + @"/Art/Units/warrior/Warrior.INI");
+        AddChild(MyUnit.AS);
+
     }
     public class Civ3Unit : Civ3UnitSprite {
-        // int foo;
+        public AnimatedSprite AS;
         public Civ3Unit(string path) : base(path) {
             GD.Print("Hi");
             GD.Print(TestInt);
+            AS = new AnimatedSprite();
+            AS.Position = new Vector2(128 * 5, 64 * 3 - 12);
+            // temporarily making it bigger
+            AS.Scale = new Vector2(2, 2);
+            SpriteFrames SF = new SpriteFrames();
+            AS.Frames = SF;
+
         }
+        // looks like I can do this in the constructor instead
         public override void InitDisplay() {
             //
         }
