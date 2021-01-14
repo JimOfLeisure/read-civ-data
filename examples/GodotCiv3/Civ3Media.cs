@@ -212,7 +212,10 @@ public class Civ3Media : Node2D
     }
     public class Civ3Unit : Civ3UnitSprite {
         // int foo;
-        public Civ3Unit(string path) : base(path) {}
+        public Civ3Unit(string path) : base(path) {
+            GD.Print("Hi");
+            GD.Print(TestInt);
+        }
         public override void InitDisplay() {
             //
         }
