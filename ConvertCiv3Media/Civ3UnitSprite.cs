@@ -77,13 +77,32 @@ namespace ReadCivData.ConvertCiv3Media
                 if (UnitIniData["Animations"][item.ToString()] != "") {
                     Console.WriteLine(UnitIniData["Animations"][item.ToString()]);
                     bar[bar.Length-1] = UnitIniData["Animations"][item.ToString()];
-                    Flic Animation = new Flic(String.Join("/", bar));
+                    Flic UnitFlic = new Flic(String.Join("/", bar));
+
+                    byte[,] CivColorUnitPal = new byte[256,3];
+                    for (int i = 0, palSplit = 64; i < 256; i++) {
+                        byte[,] TempPal = i < palSplit ?  UnitPal.Palette : UnitFlic.Palette ;
+                        for (int j = 0; j < 3; j++) {
+                            CivColorUnitPal[i,j] = TempPal[i < palSplit ? i : i, j];
+                        }
+                    }
 
                 }
             }
-            {
-                
-            }
         }
+        public virtual void InitDisplay() {
+            // override this method in the display framework to convert media to display framework objects
+        }
+        virtual public void Animation(Action action, Direction direction) {
+            // override this method in the display framework
+        }
+        virtual public void Play() {
+            // override this method in the display framework to start animation
+        }
+        virtual public void Stop() {
+            // override this method in the display framework to stop animation
+        }
+        // public void Move();
+        // public void PlaySound(Action action);
     }
 }

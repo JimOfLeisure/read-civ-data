@@ -19,6 +19,7 @@ public class Civ3Media : Node2D
         this.TerrainAsTileMap();
         // this.TerrainAsAtlasTileMap();
         this.AnimatedSpritePlay();
+        this.MoreUnitSpritePlay();
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -204,5 +205,16 @@ public class Civ3Media : Node2D
         // GD.Print(AS.IsPlaying());
         AS.Play("Run SW");
         // GD.Print(AS.IsPlaying());
+    }
+    // using an in-development non-Godot-specific object for unit media
+    public void MoreUnitSpritePlay() {
+        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + @"/Art/Units/warrior/Warrior.INI");
+    }
+    public class Civ3Unit : Civ3UnitSprite {
+        // int foo;
+        public Civ3Unit(string path) : base(path) {}
+        public override void InitDisplay() {
+            //
+        }
     }
 }
