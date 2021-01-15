@@ -41,6 +41,9 @@ namespace ReadCivData.ConvertCiv3Media
         IRRIGATE,
         FORTRESS,
         CAPTURE,
+        JUNGLE,
+        FOREST,
+        PLANT,
         STOP_AT_LAST_FRAME,
         // *** The following three are causing null filenames that don't match "" on non-warrior INIs
         // *** Oh, they don't exist in other INI's Animation sections!
@@ -78,8 +81,7 @@ namespace ReadCivData.ConvertCiv3Media
             // TODO: Fix this total hack
             string[] bar = unitPath.Split(new char[]{'/','\\'});
             foreach (UnitAction actn in Enum.GetValues(typeof(UnitAction))) {
-                // TODO: Apparently need to check if UnitIniData["Animations"][actn.ToString()] exists / not null
-                if (UnitIniData["Animations"][actn.ToString()] != "") {
+                if (UnitIniData["Animations"][actn.ToString()] != "" && UnitIniData["Animations"][actn.ToString()] != null) {
                     Console.WriteLine(UnitIniData["Animations"][actn.ToString()] != "");
                     Console.WriteLine(actn.ToString() + @" '" + UnitIniData["Animations"][actn.ToString()] + @"'");
                     bar[bar.Length-1] = UnitIniData["Animations"][actn.ToString()];
