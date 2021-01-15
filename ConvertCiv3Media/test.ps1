@@ -1,8 +1,8 @@
 # Testing the ini-parser NuGet package against unit ini files
 
 $NugetPath = '/Users/jim/.nuget/packages'
-$Civ3Root = '/Volumes/minio-storage/civ3'
-$IniPath = $Civ3Root + '/Art/Units/warrior/Warrior.INI'
+$Civ3Root = '/Users/jim/civ3'
+$IniPath = $Civ3Root + '/Art/Units/Samurai/Samurai.INI'
 
 Add-Type -Path ($NugetPath + '/ini-parser/3.4.0/lib/net20/INIFileParser.dll')
 <#

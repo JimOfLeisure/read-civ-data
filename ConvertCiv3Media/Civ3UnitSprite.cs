@@ -42,9 +42,11 @@ namespace ReadCivData.ConvertCiv3Media
         FORTRESS,
         CAPTURE,
         STOP_AT_LAST_FRAME,
-        PauseROAD,
-        PauseMINE,
-        PauseIRRIGATE      
+        // *** The following three are causing null filenames that don't match "" on non-warrior INIs
+        // *** Oh, they don't exist in other INI's Animation sections!
+        // PauseROAD,
+        // PauseMINE,
+        // PauseIRRIGATE      
 
     }
     // will probably make these to-override methods in Civ3UnitSprite instead
@@ -76,8 +78,10 @@ namespace ReadCivData.ConvertCiv3Media
             // TODO: Fix this total hack
             string[] bar = unitPath.Split(new char[]{'/','\\'});
             foreach (UnitAction actn in Enum.GetValues(typeof(UnitAction))) {
+                // TODO: Apparently need to check if UnitIniData["Animations"][actn.ToString()] exists / not null
                 if (UnitIniData["Animations"][actn.ToString()] != "") {
-                    Console.WriteLine(UnitIniData["Animations"][actn.ToString()]);
+                    Console.WriteLine(UnitIniData["Animations"][actn.ToString()] != "");
+                    Console.WriteLine(actn.ToString() + @" '" + UnitIniData["Animations"][actn.ToString()] + @"'");
                     bar[bar.Length-1] = UnitIniData["Animations"][actn.ToString()];
                     Flic UnitFlic = new Flic(String.Join("/", bar));
 

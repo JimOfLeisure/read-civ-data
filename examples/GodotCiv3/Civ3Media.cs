@@ -162,9 +162,9 @@ public class Civ3Media : Node2D
         {
             if (shadows && ba[i] > 239) {
                 // using black and transparency
-                // OutImage.SetPixel(i % width, i / width, Color.Color8(0,0,0, (byte)((255 -ba[i]) * 16)));
+                OutImage.SetPixel(i % width, i / width, Color.Color8(0,0,0, (byte)((255 -ba[i]) * 16)));
                 // using the palette color but adding transparency
-                OutImage.SetPixel(i % width, i / width, Color.Color8(palette[ba[i],0], palette[ba[i],1], palette[ba[i],2], (byte)((255 -ba[i]) * 16)));
+                // OutImage.SetPixel(i % width, i / width, Color.Color8(palette[ba[i],0], palette[ba[i],1], palette[ba[i],2], (byte)((255 -ba[i]) * 16)));
             } else {
                 OutImage.SetPixel(i % width, i / width, Color.Color8(palette[ba[i],0], palette[ba[i],1], palette[ba[i],2], ba[i] == 255 ? (byte)0 : (byte)255));
             }
@@ -215,7 +215,7 @@ public class Civ3Media : Node2D
     // using an in-development non-Godot-specific object for unit media
     public void MoreUnitSpritePlay() {
         for (int y = 0; y < 6; y++) {
-        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + @"/Art/Units/warrior/Warrior.INI");
+        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Samurai/Samurai.INI");
             for (int x=0; x < 7; x++) {
                 AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
                 AddChild(foo);

@@ -7,4 +7,4 @@ script = ExtResource( 1 )
 __meta__ = {
 "_editor_description_": "	"
 }
-Civ3Path = "/Volumes/minio-storage/civ3"
+Civ3Path = "/Users/jim/civ3"
