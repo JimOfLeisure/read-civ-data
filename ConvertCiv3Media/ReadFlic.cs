@@ -7,7 +7,7 @@ namespace ReadCivData.ConvertCiv3Media
     // Not intended to be a generalized/universal Flic reader
     // Implementing from description at https://www.drdobbs.com/windows/the-flic-file-format/184408954
     public class Flic {
-        // Images is an array of animatinos,images, each of which is a byte array of palette indexes
+        // Images is an array of animations,images, each of which is a byte array of palette indexes
         public byte[,][] Images;
         // All animations/images have same palette, height, and width
         // Palette is 256 colors in red, green, blue order

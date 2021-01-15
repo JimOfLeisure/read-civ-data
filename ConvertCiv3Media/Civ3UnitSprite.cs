@@ -57,9 +57,11 @@ namespace ReadCivData.ConvertCiv3Media
         // public void SetLocation(int x, int y);
     }
     public class Civ3UnitSprite {
+        Flic[] Animations = new Flic[Enum.GetNames(typeof(Action)).Length];
         protected int TestInt;
         // TODO: handle mismatched cases in ini file .. maybe try INI then ini ?
-        public Civ3UnitSprite(string unitPath) {
+        // unitColor must be from 0 - 31
+        public Civ3UnitSprite(string unitPath, byte unitColor = 0) {
             TestInt = 42;
             // TODO: Parameterize this and/or take ini path and chop it up
             string UnitIniPath = unitPath + "Warrior.INI";
@@ -69,16 +71,16 @@ namespace ReadCivData.ConvertCiv3Media
             // TODO: Fix this total hack
             string[] foo = unitPath.Split(new char[]{'/','\\'});
             foo[foo.Length-2] = "Palettes";
-            foo[foo.Length-1] = "ntp00.pcx";
+            foo[foo.Length-1] = String.Format("ntp{0:D02}.pcx", unitColor);
             Console.WriteLine(String.Join("/", foo));
             Pcx UnitPal = new Pcx(String.Join("/", foo));
 
             // TODO: Fix this total hack
             string[] bar = unitPath.Split(new char[]{'/','\\'});
-            foreach (Action item in Enum.GetValues(typeof(Action))) {
-                if (UnitIniData["Animations"][item.ToString()] != "") {
-                    Console.WriteLine(UnitIniData["Animations"][item.ToString()]);
-                    bar[bar.Length-1] = UnitIniData["Animations"][item.ToString()];
+            foreach (Action actn in Enum.GetValues(typeof(Action))) {
+                if (UnitIniData["Animations"][actn.ToString()] != "") {
+                    Console.WriteLine(UnitIniData["Animations"][actn.ToString()]);
+                    bar[bar.Length-1] = UnitIniData["Animations"][actn.ToString()];
                     Flic UnitFlic = new Flic(String.Join("/", bar));
 
                     byte[,] CivColorUnitPal = new byte[256,3];
@@ -88,6 +90,10 @@ namespace ReadCivData.ConvertCiv3Media
                             CivColorUnitPal[i,j] = TempPal[i < palSplit ? i : i, j];
                         }
                     }
+                    // foreach(Direction dir in Enum.GetValues(typeof(Direction))) {
+                        UnitFlic.Palette = CivColorUnitPal;
+                        Animations[(int)actn] = UnitFlic;
+                    // }
 
                 }
             }

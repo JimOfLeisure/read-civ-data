@@ -224,7 +224,7 @@ public class Civ3Media : Node2D
             SpriteFrames SF = new SpriteFrames();
             AS.Frames = SF;
             // TODO: Loop through animations and create sprites
-            //   first need to add instance properties to parent class
+            // for (int actn = 0; actn < )
         }
         // looks like I can do this in the constructor instead
         public override void InitDisplay() {
