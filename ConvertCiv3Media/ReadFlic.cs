@@ -7,9 +7,7 @@ namespace ReadCivData.ConvertCiv3Media
     // Not intended to be a generalized/universal Flic reader
     // Implementing from description at https://www.drdobbs.com/windows/the-flic-file-format/184408954
     public class Flic {
-        // Images is an array of images, each of which is a byte array of palette indexes
-        // In the future this may become a 3-dimensional array of direction - images - byte array
-        // changing to 3-dimensions
+        // Images is an array of animatinos,images, each of which is a byte array of palette indexes
         public byte[,][] Images;
         // All animations/images have same palette, height, and width
         // Palette is 256 colors in red, green, blue order
@@ -27,8 +25,6 @@ namespace ReadCivData.ConvertCiv3Media
 
             int FileFormat = BitConverter.ToUInt16(FlicBytes, 4);
             // Should be 0xAF12
-            // Console.WriteLine(String.Format("0x{0:X04}", FileFormat));
-            Console.WriteLine(FileFormat.ToString("X4"));
             if (FileFormat != 0xaf12) {
                 throw new ApplicationException("Flic version # " + FileFormat.ToString("X4") + "does not match 0xaf12");
             }
@@ -43,13 +39,9 @@ namespace ReadCivData.ConvertCiv3Media
             int NumAnimations = BitConverter.ToUInt16(FlicBytes, 0x60);
             // but every animation has a ring frame, so there are this many frames plus one for each
             int NumFramesPerAnimation = BitConverter.ToUInt16(FlicBytes, 0x62);
-            Console.WriteLine(NumAnimations);
-            Console.WriteLine(NumFramesPerAnimation);
 
             // Initialize image frames
             this.Images = new byte[NumAnimations, NumFramesPerAnimation][];
-            // FIXME: hack to get to 88 frames
-            // this.Images = new byte[NumFrames + 8][];
             for (int i = 0; i < NumAnimations; i++) {
                 for (int j = 0; j < NumFramesPerAnimation; j++) {
                     this.Images[i,j] = new byte[this.Width * this.Height];
@@ -63,10 +55,9 @@ namespace ReadCivData.ConvertCiv3Media
             // Animations loop
             for (int anim = 0; anim < NumAnimations; anim++) {
                 // Flic frames loop
-                // FIXME: The following two result in different numbers of frames processed!
-                // for (int f = 0; Offset < FlicBytes.Length; f++) {
                 for (int f = 0; f < NumFramesPerAnimation; f++) {
                     // Frame chunk headers should be 0xF1Fa; prefix chunk header is 0xF100
+                    // TODO: add exceptions if the headers don't match?
                     int ChunkLength = BitConverter.ToInt32(FlicBytes, Offset);
                     int Chunktype = BitConverter.ToUInt16(FlicBytes, Offset + 4);
                     int NumSubChunks = BitConverter.ToUInt16(FlicBytes, Offset + 6);
@@ -75,7 +66,6 @@ namespace ReadCivData.ConvertCiv3Media
                     for (int i = 0, SubOffset = Offset + 16; i < NumSubChunks; i++) {
                         int SubChunkLength = BitConverter.ToInt32(FlicBytes, SubOffset);
                         int SubChunkType = BitConverter.ToUInt16(FlicBytes, SubOffset + 4);
-                        Console.WriteLine(String.Format("{0}-{1}-{2}", anim, f, SubChunkType));
                         switch (SubChunkType) {
                             case 4:
                                 // Palette chunk
