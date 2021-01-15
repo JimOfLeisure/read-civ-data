@@ -60,3 +60,4 @@ This reads the unit INI file and loads a Flic[] property so that all of a unit's
 - Does not account for endianness; if compiled on a big endian system, number formats may be wrong
 - Does not yet handle unit smoke colors
 - Unit color parameterization not yet fully plumbed
+- Only stores one palette per Flic, but the spec allows for palette changes beween frames, and Civ3 reportedly has some of that, although I haven't seen it yet
