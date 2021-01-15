@@ -194,8 +194,8 @@ public class Civ3Media : Node2D
                 CivColorUnitPal[i,j] = TempPal[i < foo ? i : i, j];
             }
         }
-        for (int i = 0; i < 10; i++) {
-            Image ImgTxtr = ByteArrayToImage(Unit.Images[i], CivColorUnitPal, Unit.Width, Unit.Height, shadows: true);
+        for (int i = 0; i < Unit.Images.GetLength(1); i++) {
+            Image ImgTxtr = ByteArrayToImage(Unit.Images[0,i], CivColorUnitPal, Unit.Width, Unit.Height, shadows: true);
             ImageTexture Txtr = new ImageTexture();
             // TODO: parametrize flags parameter
             Txtr.CreateFromImage(ImgTxtr, 7);
