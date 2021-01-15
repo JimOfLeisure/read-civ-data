@@ -154,7 +154,7 @@ public class Civ3Media : Node2D
         GD.Print(TS.GetTilesIds());
         AddChild(TM);
     }
-    Image ByteArrayToImage(byte[] ba, byte[,] palette, int width, int height, int[] transparent = null, bool shadows = false) {
+    public static Image ByteArrayToImage(byte[] ba, byte[,] palette, int width, int height, int[] transparent = null, bool shadows = false) {
         Image OutImage = new Image();
         OutImage.Create(width, height, false, Image.Format.Rgba8);
         OutImage.Lock();
@@ -195,7 +195,13 @@ public class Civ3Media : Node2D
             }
         }
         for (int i = 0; i < Unit.Images.GetLength(1); i++) {
-            Image ImgTxtr = ByteArrayToImage(Unit.Images[0,i], CivColorUnitPal, Unit.Width, Unit.Height, shadows: true);
+            Image ImgTxtr = ByteArrayToImage(
+                Unit.Images[0,i],
+                CivColorUnitPal,
+                Unit.Width,
+                Unit.Height,
+                shadows: true
+            );
             ImageTexture Txtr = new ImageTexture();
             // TODO: parametrize flags parameter
             Txtr.CreateFromImage(ImgTxtr, 7);
@@ -225,6 +231,34 @@ public class Civ3Media : Node2D
             AS.Frames = SF;
             // TODO: Loop through animations and create sprites
             foreach (UnitAction actn in Enum.GetValues(typeof(UnitAction))) {
+                // Ensuring there is image data for this action
+                // if (Animations[(int)actn].Images[0,0].Length > 0) {
+                if (Animations[(int)actn] != null) {
+                    foreach (Direction dir in Enum.GetValues(typeof(Direction))) {
+                        string ActionAndDirection = String.Format("{0}-{1}", actn.ToString(), dir.ToString());
+                        SF.AddAnimation(ActionAndDirection);
+                        SF.SetAnimationSpeed(ActionAndDirection, 15);
+
+                        for (int i = 0; i < Animations[(int)actn].Images.GetLength(1); i++) {
+                            // GD.Print(Animations[(int)actn].Images[(int)dir,i][0]);
+                            // GD.Print(Animations[(int)actn].Palette[255,2]);
+                            // GD.Print(Animations[(int)actn].Width);
+                            // GD.Print(Animations[(int)actn].Height);
+                            Image ImgTxtr = Civ3Media.ByteArrayToImage(
+                                Animations[(int)actn].Images[(int)dir,i],
+                                Animations[(int)actn].Palette,
+                                Animations[(int)actn].Width,
+                                Animations[(int)actn].Height,
+                                shadows: true
+                            );
+                            ImageTexture Txtr = new ImageTexture();
+                            // TODO: parametrize flags parameter
+                            Txtr.CreateFromImage(ImgTxtr, 7);
+                            SF.AddFrame(ActionAndDirection, Txtr);
+                        }
+
+                    }
+                }
             }
         }
         // looks like I can do this in the constructor instead
