@@ -62,7 +62,7 @@ namespace ReadCivData.ConvertCiv3Media
         // unitColor must be from 0 - 31
         public Civ3UnitSprite(string unitPath, byte unitColor = 0) {
             // TODO: Parameterize this and/or take ini path and chop it up
-            string UnitIniPath = unitPath + "Warrior.INI";
+            // string UnitIniPath = unitPath + "Warrior.INI";
             FileIniDataParser UnitIniFile = new FileIniDataParser();
             IniData UnitIniData = UnitIniFile.ReadFile(unitPath);
 
