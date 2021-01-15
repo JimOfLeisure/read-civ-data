@@ -215,7 +215,7 @@ public class Civ3Media : Node2D
     // using an in-development non-Godot-specific object for unit media
     public void MoreUnitSpritePlay() {
         for (int y = 0; y < 6; y++) {
-        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Worker/Worker.INI");
+        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Samurai/Samurai.INI");
             for (int x=0; x < 7; x++) {
                 AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
                 AddChild(foo);
