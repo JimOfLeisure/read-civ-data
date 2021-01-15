@@ -221,12 +221,20 @@ public class Civ3Media : Node2D
                 AddChild(foo);
                 foo.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 64);
                 Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
-                foo.Play("ATTACK1-" + dir.ToString());
+                UnitAction actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
+                string actnName = actn.ToString() + "-" + dir.ToString();
+                for (;!MyUnit.SF.HasAnimation(actnName);) {
+
+                    actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
+                    actnName = actn.ToString() + "-" + dir.ToString();
+                }
+                foo.Play(actn.ToString() + "-" + dir.ToString());
             }
         }
     }
     public class Civ3Unit : Civ3UnitSprite {
         public AnimatedSprite AS;
+        public SpriteFrames SF;
         public Civ3Unit(string path) : base(path) {
             GD.Print("Hi");
             GD.Print(TestInt);
@@ -234,7 +242,7 @@ public class Civ3Media : Node2D
             AS.Position = new Vector2(128 * 5, 64 * 3 - 12);
             // temporarily making it bigger
             AS.Scale = new Vector2(2, 2);
-            SpriteFrames SF = new SpriteFrames();
+            SF = new SpriteFrames();
             AS.Frames = SF;
             // TODO: Loop through animations and create sprites
             foreach (UnitAction actn in Enum.GetValues(typeof(UnitAction))) {
