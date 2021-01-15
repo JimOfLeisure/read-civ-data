@@ -61,3 +61,7 @@ This reads the unit INI file and loads a Flic[] property so that all of a unit's
 - Does not yet handle unit smoke colors
 - Unit color parameterization not yet fully plumbed
 - Only stores one palette per Flic, but the spec allows for palette changes beween frames, and Civ3 reportedly has some of that, although I haven't seen it yet
+- No time/speed is currently extracted from Flic
+- Only Flic and PCX formats in use by Civ3 are implemented; not for general-purpose use
+- PCX reader only handles 8-bit palette PCX files
+- Flic reader uses custom header fields from Civ3
