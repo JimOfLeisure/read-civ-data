@@ -216,7 +216,8 @@ public class Civ3Media : Node2D
     public void MoreUnitSpritePlay() {
         Civ3Unit MyUnit = new Civ3Unit(Civ3Path + @"/Art/Units/warrior/Warrior.INI");
         AddChild(MyUnit.AS);
-
+        MyUnit.AS.Position = new Vector2(128 * 5, 64 * 3 - 12);
+        MyUnit.AS.Play("ATTACK1-SE");
     }
     public class Civ3Unit : Civ3UnitSprite {
         public AnimatedSprite AS;
