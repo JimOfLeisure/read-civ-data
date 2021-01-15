@@ -39,7 +39,7 @@ Example: `Flic MyImage = new Flic(@"path/to/file.flc");`
 - `int Width` - Width of the images
 - `int Height` - Height of the images
 - `byte[,] Palette` - A 256x3 byte array of 256 colors in red, green, blue order
-- `byte[][] Images` - An array of images, each of which is a byte array of the image data. Each byte is a pixel, the value of which is the index of the Palette indicating the color
+- `byte[,][] Images` - An array of animations, images, each of which is a byte array of the image data. Each byte is a pixel, the value of which is the index of the Palette indicating the color
 
 ### Methods
 
