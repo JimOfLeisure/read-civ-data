@@ -58,11 +58,9 @@ namespace ReadCivData.ConvertCiv3Media
     }
     public class Civ3UnitSprite {
         protected Flic[] Animations = new Flic[Enum.GetNames(typeof(UnitAction)).Length];
-        protected int TestInt;
         // TODO: handle mismatched cases in ini file .. maybe try INI then ini ?
         // unitColor must be from 0 - 31
         public Civ3UnitSprite(string unitPath, byte unitColor = 0) {
-            TestInt = 42;
             // TODO: Parameterize this and/or take ini path and chop it up
             string UnitIniPath = unitPath + "Warrior.INI";
             FileIniDataParser UnitIniFile = new FileIniDataParser();

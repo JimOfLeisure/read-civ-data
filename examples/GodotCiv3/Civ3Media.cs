@@ -220,11 +220,14 @@ public class Civ3Media : Node2D
                 AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
                 AddChild(foo);
                 foo.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 64);
+
+                // Random direction
                 Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
+
+                // keep trying random actions until the action/direction combo exists for unit (warriors don't build roads)
                 UnitAction actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
                 string actnName = actn.ToString() + "-" + dir.ToString();
                 for (;!MyUnit.SF.HasAnimation(actnName);) {
-
                     actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
                     actnName = actn.ToString() + "-" + dir.ToString();
                 }
@@ -236,8 +239,6 @@ public class Civ3Media : Node2D
         public AnimatedSprite AS;
         public SpriteFrames SF;
         public Civ3Unit(string path) : base(path) {
-            GD.Print("Hi");
-            GD.Print(TestInt);
             AS = new AnimatedSprite();
             AS.Position = new Vector2(128 * 5, 64 * 3 - 12);
             // temporarily making it bigger
@@ -247,7 +248,6 @@ public class Civ3Media : Node2D
             // TODO: Loop through animations and create sprites
             foreach (UnitAction actn in Enum.GetValues(typeof(UnitAction))) {
                 // Ensuring there is image data for this action
-                // if (Animations[(int)actn].Images[0,0].Length > 0) {
                 if (Animations[(int)actn] != null) {
                     foreach (Direction dir in Enum.GetValues(typeof(Direction))) {
                         string ActionAndDirection = String.Format("{0}-{1}", actn.ToString(), dir.ToString());
@@ -255,10 +255,6 @@ public class Civ3Media : Node2D
                         SF.SetAnimationSpeed(ActionAndDirection, 15);
 
                         for (int i = 0; i < Animations[(int)actn].Images.GetLength(1); i++) {
-                            // GD.Print(Animations[(int)actn].Images[(int)dir,i][0]);
-                            // GD.Print(Animations[(int)actn].Palette[255,2]);
-                            // GD.Print(Animations[(int)actn].Width);
-                            // GD.Print(Animations[(int)actn].Height);
                             Image ImgTxtr = Civ3Media.ByteArrayToImage(
                                 Animations[(int)actn].Images[(int)dir,i],
                                 Animations[(int)actn].Palette,
