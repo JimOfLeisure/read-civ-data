@@ -77,10 +77,14 @@ namespace ReadCivData.ConvertCiv3Media
                                 if (SkipCount != 0) {
                                     throw new ApplicationException("Unable to deal with color palette with non-zero SkipCount = " + SkipCount);
                                 }
+                                int CopyCount = BitConverter.GetBytes(BitConverter.ToChar(FlicBytes, SubOffset + 9))[0];
+                                if (CopyCount != 0) {
+                                    throw new ApplicationException("Unable to deal with color palette with non-zero CopyCount = " + CopyCount);
+                                }
                                 for (int p = 0; p < 256; p++) {
-                                    this.Palette[p,0] = FlicBytes[8 + SubOffset + p * 3];
-                                    this.Palette[p,1] = FlicBytes[8 + SubOffset + p * 3 + 1];
-                                    this.Palette[p,2] = FlicBytes[8 + SubOffset + p * 3 + 2];
+                                    this.Palette[p,0] = FlicBytes[10 + SubOffset + p * 3];
+                                    this.Palette[p,1] = FlicBytes[10 + SubOffset + p * 3 + 1];
+                                    this.Palette[p,2] = FlicBytes[10 + SubOffset + p * 3 + 2];
                                 }
                                 break;
                             case 15:
