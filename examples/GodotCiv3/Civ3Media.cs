@@ -18,7 +18,7 @@ public class Civ3Media : Node2D
         // this.TerrainAsSprites();
         this.TerrainAsTileMap();
         // this.TerrainAsAtlasTileMap();
-        this.AnimatedSpritePlay();
+        // this.AnimatedSpritePlay();
         this.MoreUnitSpritePlay();
     }
 
@@ -214,10 +214,16 @@ public class Civ3Media : Node2D
     }
     // using an in-development non-Godot-specific object for unit media
     public void MoreUnitSpritePlay() {
+        for (int y = 0; y < 6; y++) {
         Civ3Unit MyUnit = new Civ3Unit(Civ3Path + @"/Art/Units/warrior/Warrior.INI");
-        AddChild(MyUnit.AS);
-        MyUnit.AS.Position = new Vector2(128 * 5, 64 * 3 - 12);
-        MyUnit.AS.Play("ATTACK1-SE");
+            for (int x=0; x < 7; x++) {
+                AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
+                AddChild(foo);
+                foo.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 64);
+                Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
+                foo.Play("ATTACK1-" + dir.ToString());
+            }
+        }
     }
     public class Civ3Unit : Civ3UnitSprite {
         public AnimatedSprite AS;
