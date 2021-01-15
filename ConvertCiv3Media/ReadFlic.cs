@@ -28,6 +28,7 @@ namespace ReadCivData.ConvertCiv3Media
             int FileFormat = BitConverter.ToUInt16(FlicBytes, 4);
             // Should be 0xAF12
             // Console.WriteLine(String.Format("0x{0:X04}", FileFormat));
+            Console.WriteLine(FileFormat.ToString("X4"));
             if (FileFormat != 0xaf12) {
                 throw new ApplicationException("Flic version # " + FileFormat.ToString("X4") + "does not match 0xaf12");
             }
@@ -41,7 +42,9 @@ namespace ReadCivData.ConvertCiv3Media
             // Civ3-specific values
             int NumAnimations = BitConverter.ToUInt16(FlicBytes, 0x60);
             // but every animation has a ring frame, so there are this many frames plus one for each
-            int NumFramesPerAnimation = BitConverter.ToUInt16(FlicBytes, 0x64);
+            int NumFramesPerAnimation = BitConverter.ToUInt16(FlicBytes, 0x62);
+            Console.WriteLine(NumAnimations);
+            Console.WriteLine(NumFramesPerAnimation);
 
             // Initialize image frames
             this.Images = new byte[NumAnimations, NumFramesPerAnimation][];
@@ -72,6 +75,7 @@ namespace ReadCivData.ConvertCiv3Media
                     for (int i = 0, SubOffset = Offset + 16; i < NumSubChunks; i++) {
                         int SubChunkLength = BitConverter.ToInt32(FlicBytes, SubOffset);
                         int SubChunkType = BitConverter.ToUInt16(FlicBytes, SubOffset + 4);
+                        Console.WriteLine(String.Format("{0}-{1}-{2}", anim, f, SubChunkType));
                         switch (SubChunkType) {
                             case 4:
                                 // Palette chunk
@@ -105,7 +109,7 @@ namespace ReadCivData.ConvertCiv3Media
                                         // If TypeSise is negative, repeat the next byte abs(TypeSize) times
                                         bool CopyMany = TypeSize < 0;
                                         for (int foo = 0; foo < Math.Abs(TypeSize); foo++) {
-                                            this.Images[f][y * this.Width + x] = FlicBytes[head];
+                                            this.Images[anim,f][y * this.Width + x] = FlicBytes[head];
                                             x++;
                                             if (CopyMany) {
                                                 head++;
@@ -125,7 +129,7 @@ namespace ReadCivData.ConvertCiv3Media
                                 }
                                 // diff chunk
                                 // Copy last frame image
-                                Array.Copy(this.Images[f-1], this.Images[f], this.Images[f].Length);
+                                Array.Copy(this.Images[anim,f-1], this.Images[anim,f], this.Images[anim,f].Length);
                                 int NumLines = BitConverter.ToUInt16(FlicBytes, SubOffset + 6);
                                 for (int Line = 0, y = 0, head = SubOffset + 8; Line < NumLines; Line++) {
                                     int WordsPerLine = BitConverter.ToInt16(FlicBytes, head);
@@ -139,7 +143,7 @@ namespace ReadCivData.ConvertCiv3Media
                                     // If two high bits are 10, this is a special word to set the last pixel for odd-length lines
                                     // This may not have been tested; none of my Flics change the last pixel
                                     if ((WordsPerLine & 0x800) == 0x800) {
-                                        this.Images[f][this.Width * (y + 1) - 1] = (byte)(WordsPerLine & 0xff);
+                                        this.Images[anim,f][this.Width * (y + 1) - 1] = (byte)(WordsPerLine & 0xff);
                                         WordsPerLine = BitConverter.ToInt16(FlicBytes, head);
                                         head+=2;
                                     }
@@ -160,8 +164,8 @@ namespace ReadCivData.ConvertCiv3Media
                                         // If NumWords is positive, copy NumWords following words to image
                                         // If NumWords is negative, repeat the next word abs(NumWords) times
                                         for (int ii = 0; ii < Math.Abs(NumWords); ii++) {
-                                            this.Images[f][this.Width * y + x] = FlicBytes[head];
-                                            this.Images[f][this.Width * y + x + 1] = FlicBytes[head + 1];
+                                            this.Images[anim,f][this.Width * y + x] = FlicBytes[head];
+                                            this.Images[anim,f][this.Width * y + x + 1] = FlicBytes[head + 1];
                                             if (Positive) { head += 2; }
                                             x += 2;
                                         }
@@ -178,6 +182,7 @@ namespace ReadCivData.ConvertCiv3Media
                         }
                         SubOffset += SubChunkLength;
                     }
+                    // This should in effect skip the ring frame?
                     Offset += ChunkLength;
                 }
             }

@@ -35,20 +35,22 @@ namespace FlcToPngs
             // Create ImageSharp Image
             Image<Rgba32> ISImage = new Image<Rgba32>(MyAnimation.Width, MyAnimation.Height);
 
-            // frames/images loop
-            for (int frame = 0; frame < MyAnimation.Images.Length; frame++) {
-                // image pixels loop
-                for (int y = 0; y < MyAnimation.Height; y++) {
-                    for (int x = 0; x < MyAnimation.Width; x++) {
-                        ISImage[x, y] = ISPalette[MyAnimation.Images[frame][x + y * MyAnimation.Width]];
+            // animations loop
+            for (int anim = 0; anim < MyAnimation.Images.GetLength(0); anim++) {
+                // frames/images loop
+                for (int frame = 0; frame < MyAnimation.Images.GetLength(1); frame++) {
+                    // image pixels loop
+                    for (int y = 0; y < MyAnimation.Height; y++) {
+                        for (int x = 0; x < MyAnimation.Width; x++) {
+                            ISImage[x, y] = ISPalette[MyAnimation.Images[anim,frame][x + y * MyAnimation.Width]];
+                        }
+                    }
+                    // Save as PNG
+                    using (FileStream fs = File.Create("out-" + anim.ToString("D2") + "-" + frame.ToString("D2") + ".png")) {
+                        ISImage.SaveAsPng(fs);
                     }
                 }
-                // Save as PNG
-                using (FileStream fs = File.Create("out-" + frame.ToString("D2") + ".png")) {
-                    ISImage.SaveAsPng(fs);
-                }
             }
-
         }
     }
 }
