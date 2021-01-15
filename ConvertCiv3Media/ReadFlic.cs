@@ -182,9 +182,11 @@ namespace ReadCivData.ConvertCiv3Media
                         }
                         SubOffset += SubChunkLength;
                     }
-                    // This should in effect skip the ring frame?
                     Offset += ChunkLength;
                 }
+                // skip ring frame
+                int RingChunkLength = BitConverter.ToInt32(FlicBytes, Offset);
+                Offset += RingChunkLength;
             }
         }
     }
