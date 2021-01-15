@@ -18,7 +18,7 @@ namespace ReadCivData.ConvertCiv3Media
         NW,
         W
     }
-    public enum Action {
+    public enum UnitAction {
         BLANK,
         DEFAULT,
         WALK,
@@ -49,15 +49,15 @@ namespace ReadCivData.ConvertCiv3Media
     }
     // will probably make these to-override methods in Civ3UnitSprite instead
     public interface ISprite {
-        void Animation(Action action, Direction direction);
+        void Animation(UnitAction action, Direction direction);
         void Play();
         void Stop();
         // public void Move();
-        // public void PlaySound(Action action);
+        // public void PlaySound(UnitAction action);
         // public void SetLocation(int x, int y);
     }
     public class Civ3UnitSprite {
-        Flic[] Animations = new Flic[Enum.GetNames(typeof(Action)).Length];
+        Flic[] Animations = new Flic[Enum.GetNames(typeof(UnitAction)).Length];
         protected int TestInt;
         // TODO: handle mismatched cases in ini file .. maybe try INI then ini ?
         // unitColor must be from 0 - 31
@@ -77,7 +77,7 @@ namespace ReadCivData.ConvertCiv3Media
 
             // TODO: Fix this total hack
             string[] bar = unitPath.Split(new char[]{'/','\\'});
-            foreach (Action actn in Enum.GetValues(typeof(Action))) {
+            foreach (UnitAction actn in Enum.GetValues(typeof(UnitAction))) {
                 if (UnitIniData["Animations"][actn.ToString()] != "") {
                     Console.WriteLine(UnitIniData["Animations"][actn.ToString()]);
                     bar[bar.Length-1] = UnitIniData["Animations"][actn.ToString()];
@@ -101,7 +101,7 @@ namespace ReadCivData.ConvertCiv3Media
         public virtual void InitDisplay() {
             // override this method in the display framework to convert media to display framework objects
         }
-        virtual public void Animation(Action action, Direction direction) {
+        virtual public void Animation(UnitAction action, Direction direction) {
             // override this method in the display framework
         }
         virtual public void Play() {
@@ -111,6 +111,6 @@ namespace ReadCivData.ConvertCiv3Media
             // override this method in the display framework to stop animation
         }
         // public void Move();
-        // public void PlaySound(Action action);
+        // public void PlaySound(UnitAction action);
     }
 }

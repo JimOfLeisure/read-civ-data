@@ -224,7 +224,8 @@ public class Civ3Media : Node2D
             SpriteFrames SF = new SpriteFrames();
             AS.Frames = SF;
             // TODO: Loop through animations and create sprites
-            // for (int actn = 0; actn < )
+            foreach (UnitAction actn in Enum.GetValues(typeof(UnitAction))) {
+            }
         }
         // looks like I can do this in the constructor instead
         public override void InitDisplay() {
