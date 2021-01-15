@@ -9,7 +9,7 @@ namespace FlcToPngs
     class Program
     {
         // static string OutFilePath = "out.png";
-        static string Civ3RootPath = @"/Volumes/minio-storage/steamapps/steamapps/common/Sid Meier's Civilization III Complete";
+        static string Civ3RootPath = @"/Volumes/minio-storage/civ3";
         static string PcxFilePath = Civ3RootPath + @"/Art/Units/warrior/warriorRun.flc";
         static void Main(string[] args)
         {
