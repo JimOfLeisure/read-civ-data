@@ -77,7 +77,7 @@ public class Civ3Media : Node2D
             }
         }
 
-        int mywidth = 14, myheight = 14;
+        int mywidth = 14, myheight = 18;
         Map = new int[mywidth,myheight];
         // Populate map values, 0 out terrain mask
         for (int y = 0; y < myheight; y++) {
@@ -214,12 +214,12 @@ public class Civ3Media : Node2D
     }
     // using an in-development non-Godot-specific object for unit media
     public void MoreUnitSpritePlay() {
-        for (int y = 0; y < 6; y++) {
-        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Samurai/Samurai.INI");
+        for (int y = 0; y < 9; y++) {
+        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Worker/Worker.INI");
             for (int x=0; x < 7; x++) {
                 AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
                 AddChild(foo);
-                foo.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 64);
+                foo.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 44);
 
                 // Random direction
                 Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
@@ -242,7 +242,7 @@ public class Civ3Media : Node2D
             AS = new AnimatedSprite();
             AS.Position = new Vector2(128 * 5, 64 * 3 - 12);
             // temporarily making it bigger
-            AS.Scale = new Vector2(2, 2);
+            // AS.Scale = new Vector2(2, 2);
             SF = new SpriteFrames();
             AS.Frames = SF;
             // TODO: Loop through animations and create sprites
