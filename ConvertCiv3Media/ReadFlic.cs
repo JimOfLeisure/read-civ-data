@@ -39,6 +39,12 @@ namespace ReadCivData.ConvertCiv3Media
             int NumAnimations = BitConverter.ToUInt16(FlicBytes, 0x60);
             // but every animation has a ring frame, so there are this many frames plus one for each
             int NumFramesPerAnimation = BitConverter.ToUInt16(FlicBytes, 0x62);
+            // Leaderheads don't have the above values, so revert to act like a regular Flic
+            // TODO: See if this affects my ring-frame skip
+            if (NumAnimations == 0) {
+                NumAnimations = 1;
+                NumFramesPerAnimation = NumFrames;
+            }
 
             // Initialize image frames
             this.Images = new byte[NumAnimations, NumFramesPerAnimation][];

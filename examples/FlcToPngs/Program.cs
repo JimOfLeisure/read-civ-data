@@ -9,8 +9,8 @@ namespace FlcToPngs
     class Program
     {
         // static string OutFilePath = "out.png";
-        static string Civ3RootPath = @"/Volumes/minio-storage/civ3";
-        static string PcxFilePath = Civ3RootPath + @"/Art/Units/warrior/warriorRun.flc";
+        static string Civ3RootPath = @"/Users/jim/civ3";
+        static string PcxFilePath = Civ3RootPath + @"/Conquests/Art/Flics/X2_Smoke-Jaguar_mid_fwrd.flc";
         static void Main(string[] args)
         {
             // Flic decoder
