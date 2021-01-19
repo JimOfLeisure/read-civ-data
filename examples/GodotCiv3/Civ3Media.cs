@@ -236,10 +236,12 @@ public class Civ3Media : Node2D
                     actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
                     actnName = actn.ToString() + "-" + dir.ToString();
                 }
-                foo.Play(actn.ToString() + "-" + dir.ToString());
+                // foo.Play(actn.ToString() + "-" + dir.ToString());
+                foo.Animation(actn, dir);
             }
         }
     }
+    // TODO: Animation speed and movement speed should have ideally a 1:1 relationship
     public class Civ3Unit : Civ3UnitSprite {
         public AnimatedSprite AS;
         public SpriteFrames SF;
@@ -278,7 +280,11 @@ public class Civ3Media : Node2D
             }
         }
         public override void Animation(UnitAction action, Direction direction) {
-            //
+            string actnName = action.ToString() + "-" + direction.ToString();
+            if (!SF.HasAnimation(actnName)) {
+                throw new ApplicationException(String.Format("Animation does not exist for {0} action and {1} direction", action.ToString(), direction.ToString()));
+            }
+            AS.Play(actnName);
         }
         public override void Move(Direction direction, float speed = 1) {
         }
