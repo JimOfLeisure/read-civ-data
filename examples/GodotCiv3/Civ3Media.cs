@@ -219,25 +219,26 @@ public class Civ3Media : Node2D
         for (int y = 2; y < 6; y++) {
         Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Samurai/Samurai.INI", UnitColor);
             for (int x=0; x < 6; x++) {
-                AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
-                AddChild(foo);
-                foo.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 44);
-                foo.Scale = new Vector2((x+1) * (float)0.5, (x+1) * (float)0.5);
+                // AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
+                Civ3Unit DupUnit = new Civ3Unit(MyUnit);
+                AddChild(DupUnit.AS);
+                DupUnit.AS.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 44);
+                DupUnit.AS.Scale = new Vector2((x+1) * (float)0.5, (x+1) * (float)0.5);
 
                 // Random direction
-                // Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
-                Direction dir = Direction.S;
+                Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
+                // Direction dir = Direction.S;
 
                 // keep trying random actions until the action/direction combo exists for unit (warriors don't build roads)
-                // UnitAction actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
-                UnitAction actn = UnitAction.ATTACK1;
+                UnitAction actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
+                // UnitAction actn = UnitAction.ATTACK1;
                 string actnName = actn.ToString() + "-" + dir.ToString();
                 for (;!MyUnit.SF.HasAnimation(actnName);) {
                     actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
                     actnName = actn.ToString() + "-" + dir.ToString();
                 }
-                // foo.Play(actn.ToString() + "-" + dir.ToString());
-                foo.Animation(actn, dir);
+                // DupUnit.AS.Play(actn.ToString() + "-" + dir.ToString());
+                DupUnit.Animation(actn, dir);
             }
         }
     }
@@ -245,6 +246,12 @@ public class Civ3Media : Node2D
     public class Civ3Unit : Civ3UnitSprite {
         public AnimatedSprite AS;
         public SpriteFrames SF;
+        // constructor to copy existing unit
+        public Civ3Unit(Civ3Unit civ3Unit) : base(civ3Unit) {
+            this.AS = (AnimatedSprite)civ3Unit.AS.Duplicate();
+            this.SF = (SpriteFrames)civ3Unit.SF.Duplicate();
+            this.AS.Frames = this.SF;
+        }
         public Civ3Unit(string path, byte unitColor = 0) : base(path, unitColor) {
             AS = new AnimatedSprite();
             AS.Position = new Vector2(128 * 5, 64 * 3 - 12);
@@ -259,7 +266,7 @@ public class Civ3Media : Node2D
                     foreach (Direction dir in Enum.GetValues(typeof(Direction))) {
                         string ActionAndDirection = String.Format("{0}-{1}", actn.ToString(), dir.ToString());
                         SF.AddAnimation(ActionAndDirection);
-                        SF.SetAnimationSpeed(ActionAndDirection, 7);
+                        SF.SetAnimationSpeed(ActionAndDirection, 10);
 
                         for (int i = 0; i < Animations[(int)actn].Images.GetLength(1); i++) {
                             Image ImgTxtr = Civ3Media.ByteArrayToImage(
