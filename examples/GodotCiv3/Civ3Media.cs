@@ -221,7 +221,7 @@ public class Civ3Media : Node2D
             for (int x=0; x < 6; x++) {
                 // AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
                 Civ3Unit DupUnit = new Civ3Unit(MyUnit);
-                AddChild(DupUnit.AS);
+                AddChild(DupUnit.KB);
                 DupUnit.AS.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 44);
                 DupUnit.AS.Scale = new Vector2((x+1) * (float)0.5, (x+1) * (float)0.5);
 
@@ -239,6 +239,7 @@ public class Civ3Media : Node2D
                 }
                 // DupUnit.AS.Play(actn.ToString() + "-" + dir.ToString());
                 DupUnit.Animation(actn, dir);
+                DupUnit.Move(Direction.SW);
             }
         }
     }
@@ -246,11 +247,15 @@ public class Civ3Media : Node2D
     public class Civ3Unit : Civ3UnitSprite {
         public AnimatedSprite AS;
         public SpriteFrames SF;
+        public KinematicBody2D KB;
         // constructor to copy existing unit
         public Civ3Unit(Civ3Unit civ3Unit) : base(civ3Unit) {
             this.AS = (AnimatedSprite)civ3Unit.AS.Duplicate();
             this.SF = (SpriteFrames)civ3Unit.SF.Duplicate();
             this.AS.Frames = this.SF;
+            this.KB = new KinematicBody2D();
+            this.KB.AddChild(AS);
+            KB.AddChild(new CollisionShape2D());
         }
         public Civ3Unit(string path, byte unitColor = 0) : base(path, unitColor) {
             AS = new AnimatedSprite();
@@ -259,6 +264,9 @@ public class Civ3Media : Node2D
             // AS.Scale = new Vector2(2, 2);
             SF = new SpriteFrames();
             AS.Frames = SF;
+            this.KB = new KinematicBody2D();
+            this.KB.AddChild(AS);
+            KB.AddChild(new CollisionShape2D());
             // TODO: Loop through animations and create sprites
             foreach (UnitAction actn in Enum.GetValues(typeof(UnitAction))) {
                 // Ensuring there is image data for this action
@@ -294,6 +302,40 @@ public class Civ3Media : Node2D
             AS.Play(actnName);
         }
         public override void Move(Direction direction, float speed = 1) {
+            Vector2 velocity;
+            switch (direction)
+            {
+                case Direction.SW:
+                    velocity = new Vector2(-1, 1).Normalized() * speed;
+                    break;
+                case Direction.S:
+                    velocity = new Vector2(0, -1).Normalized() * speed;
+                    break;
+                case Direction.SE:
+                    velocity = new Vector2(-1, -1).Normalized() * speed;
+                    break;
+                case Direction.E:
+                    velocity = new Vector2(-1, -1).Normalized() * speed;
+                    break;
+                case Direction.NE:
+                    velocity = new Vector2(-1, -1).Normalized() * speed;
+                    break;
+                case Direction.N:
+                    velocity = new Vector2(-1, -1).Normalized() * speed;
+                    break;
+                case Direction.NW:
+                    velocity = new Vector2(-1, -1).Normalized() * speed;
+                    break;
+                case Direction.W:
+                    velocity = new Vector2(-1, -1).Normalized() * speed;
+                    break;
+                default:
+                    // compiler complains if I don't assign velocity, even though the above options cover all possibilities
+                    velocity = new Vector2();
+                    break;
+            }
+            Vector2 foo = KB.MoveAndSlide(velocity);
+            GD.Print(foo);
         }
     }
 }
