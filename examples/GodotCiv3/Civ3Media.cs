@@ -7,6 +7,8 @@ public class Civ3Media : Node2D
 {
     [Export(PropertyHint.Dir)]
     public string Civ3Path;
+    [Export()]
+    public byte UnitColor;
     int[,] Map;
     Hashtable Terrmask = new Hashtable();
 
@@ -214,18 +216,21 @@ public class Civ3Media : Node2D
     }
     // using an in-development non-Godot-specific object for unit media
     public void MoreUnitSpritePlay() {
-        for (int y = 0; y < 9; y++) {
-        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Worker/Worker.INI");
-            for (int x=0; x < 7; x++) {
+        for (int y = 2; y < 6; y++) {
+        Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Samurai/Samurai.INI", UnitColor);
+            for (int x=0; x < 6; x++) {
                 AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
                 AddChild(foo);
                 foo.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 44);
+                foo.Scale = new Vector2((x+1) * (float)0.5, (x+1) * (float)0.5);
 
                 // Random direction
-                Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
+                // Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
+                Direction dir = Direction.S;
 
                 // keep trying random actions until the action/direction combo exists for unit (warriors don't build roads)
-                UnitAction actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
+                // UnitAction actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
+                UnitAction actn = UnitAction.ATTACK1;
                 string actnName = actn.ToString() + "-" + dir.ToString();
                 for (;!MyUnit.SF.HasAnimation(actnName);) {
                     actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
@@ -238,7 +243,7 @@ public class Civ3Media : Node2D
     public class Civ3Unit : Civ3UnitSprite {
         public AnimatedSprite AS;
         public SpriteFrames SF;
-        public Civ3Unit(string path) : base(path) {
+        public Civ3Unit(string path, byte unitColor = 0) : base(path, unitColor) {
             AS = new AnimatedSprite();
             AS.Position = new Vector2(128 * 5, 64 * 3 - 12);
             // temporarily making it bigger
@@ -252,7 +257,7 @@ public class Civ3Media : Node2D
                     foreach (Direction dir in Enum.GetValues(typeof(Direction))) {
                         string ActionAndDirection = String.Format("{0}-{1}", actn.ToString(), dir.ToString());
                         SF.AddAnimation(ActionAndDirection);
-                        SF.SetAnimationSpeed(ActionAndDirection, 15);
+                        SF.SetAnimationSpeed(ActionAndDirection, 7);
 
                         for (int i = 0; i < Animations[(int)actn].Images.GetLength(1); i++) {
                             Image ImgTxtr = Civ3Media.ByteArrayToImage(
@@ -272,9 +277,10 @@ public class Civ3Media : Node2D
                 }
             }
         }
-        // looks like I can do this in the constructor instead
-        public override void InitDisplay() {
+        public override void Animation(UnitAction action, Direction direction) {
             //
+        }
+        public override void Move(Direction direction, float speed = 1) {
         }
     }
 }

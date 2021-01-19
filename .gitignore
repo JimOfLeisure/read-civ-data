@@ -2,6 +2,8 @@ sav/
 *.png
 *.pcx
 *.flc
+*.mp4
+*.webp
 .vscode/
 *.bin
 
