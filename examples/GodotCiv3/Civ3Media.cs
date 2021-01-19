@@ -15,7 +15,7 @@ public class Civ3Media : Node2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        GD.Print(Civ3Path);
+        // GD.Print(Civ3Path);
         GD.Randomize();
         // this.TerrainAsSprites();
         this.TerrainAsTileMap();
@@ -216,22 +216,22 @@ public class Civ3Media : Node2D
     }
     // using an in-development non-Godot-specific object for unit media
     public void MoreUnitSpritePlay() {
-        for (int y = 2; y < 6; y++) {
+        for (int y = 0; y < 9; y++) {
         Civ3Unit MyUnit = new Civ3Unit(Civ3Path + "/Art/Units/Samurai/Samurai.INI", UnitColor);
-            for (int x=0; x < 6; x++) {
+            for (int x=0; x < 7; x++) {
                 // AnimatedSprite foo = (AnimatedSprite)MyUnit.AS.Duplicate();
                 Civ3Unit DupUnit = new Civ3Unit(MyUnit);
                 AddChild(DupUnit.AS);
                 DupUnit.AS.Position = new Vector2(128 * x + 64 + 64 * (y % 2), 64 * y + 44);
-                DupUnit.AS.Scale = new Vector2((x+1) * (float)0.5, (x+1) * (float)0.5);
+                // DupUnit.AS.Scale = new Vector2((x+1) * (float)0.5, (x+1) * (float)0.5);
 
                 // Random direction
                 Direction dir = (Direction)((new Random()).Next() % (Enum.GetValues(typeof(Direction)).Length));
                 // Direction dir = Direction.S;
 
                 // keep trying random actions until the action/direction combo exists for unit (warriors don't build roads)
-                UnitAction actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
-                // UnitAction actn = UnitAction.ATTACK1;
+                // UnitAction actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
+                UnitAction actn = UnitAction.RUN;
                 string actnName = actn.ToString() + "-" + dir.ToString();
                 for (;!MyUnit.SF.HasAnimation(actnName);) {
                     actn = (UnitAction)((new Random()).Next() % (Enum.GetValues(typeof(UnitAction)).Length));
@@ -239,7 +239,7 @@ public class Civ3Media : Node2D
                 }
                 // DupUnit.AS.Play(actn.ToString() + "-" + dir.ToString());
                 DupUnit.Animation(actn, dir);
-                DupUnit.Move(Direction.SW);
+                DupUnit.Move(dir);
             }
         }
     }
@@ -294,32 +294,32 @@ public class Civ3Media : Node2D
             }
             AS.Play(actnName);
         }
-        public override void Move(Direction direction, float speed = (float)0.2) {
+        public override void Move(Direction direction, float speed = (float)0.6) {
             switch (direction)
             {
                 case Direction.SW:
                     AS.Velocity = new Vector2(-1, 1).Normalized() * speed;
                     break;
                 case Direction.S:
-                    AS.Velocity = new Vector2(0, -1).Normalized() * speed;
+                    AS.Velocity = new Vector2(0, 1) * speed;
                     break;
                 case Direction.SE:
-                    AS.Velocity = new Vector2(-1, -1).Normalized() * speed;
+                    AS.Velocity = new Vector2(1, 1).Normalized() * speed;
                     break;
                 case Direction.E:
-                    AS.Velocity = new Vector2(-1, -1).Normalized() * speed;
+                    AS.Velocity = new Vector2(1, 0) * speed;
                     break;
                 case Direction.NE:
-                    AS.Velocity = new Vector2(-1, -1).Normalized() * speed;
+                    AS.Velocity = new Vector2(1, -1).Normalized() * speed;
                     break;
                 case Direction.N:
-                    AS.Velocity = new Vector2(-1, -1).Normalized() * speed;
+                    AS.Velocity = new Vector2(0, -1) * speed;
                     break;
                 case Direction.NW:
                     AS.Velocity = new Vector2(-1, -1).Normalized() * speed;
                     break;
                 case Direction.W:
-                    AS.Velocity = new Vector2(-1, -1).Normalized() * speed;
+                    AS.Velocity = new Vector2(-1, 0) * speed;
                     break;
             }
         }
