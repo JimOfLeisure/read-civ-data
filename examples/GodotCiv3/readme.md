@@ -12,4 +12,8 @@ It currently just reads the grass terrain pcx, turns it into a sprite tile set, 
 
 ## Building
 
-Godot with mono support should be able to build and compile this without additional tooling.
+Requires:
+
+- Godot with mono support
+- Mono
+- .NET 4.7.2 SDK

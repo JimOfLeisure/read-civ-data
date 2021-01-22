@@ -324,6 +324,7 @@ public class Civ3Media : Node2D
             }
         }
     }
+    // This is just to add some movement to an AnimatedSprite
     public class MovingSprite : AnimatedSprite {
         public Vector2 Velocity = new Vector2(0, 0);
         public override void _PhysicsProcess(float delta) {
