@@ -329,6 +329,18 @@ public class Civ3Media : Node2D
         public Vector2 Velocity = new Vector2(0, 0);
         public override void _PhysicsProcess(float delta) {
             Position = Position + Velocity;
+            if (Position.x > 1040) {
+                Position = new Vector2(-30, Position.y);
+            }
+            if (Position.x < -30) {
+                Position = new Vector2(1040, Position.y);
+            }
+            if (Position.y > 800) {
+                Position = new Vector2(Position.x, -30);
+            }
+            if (Position.y < -30) {
+                Position = new Vector2(Position.x, 800);
+            }
         }
     }
 }
