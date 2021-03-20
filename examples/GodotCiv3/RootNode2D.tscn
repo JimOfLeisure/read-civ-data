@@ -7,5 +7,4 @@ script = ExtResource( 1 )
 __meta__ = {
 "_editor_description_": "	"
 }
-Civ3Path = "/Users/jim/civ3"
 UnitColor = 4
