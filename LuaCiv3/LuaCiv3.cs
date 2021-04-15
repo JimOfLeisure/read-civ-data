@@ -1,5 +1,5 @@
 using System;
-using ReadCivData.UtilsCiv3;
+using MoonSharp.Interpreter;
 
 namespace ReadCivData.LuaCiv3 {
     public class Test
@@ -7,6 +7,10 @@ namespace ReadCivData.LuaCiv3 {
         public static string Foo()
         {
             return "Hi from LuaCiv3";
+        }
+        public static void DoLua(string script)
+        {
+            Script.RunString(script);
         }
     }
         
