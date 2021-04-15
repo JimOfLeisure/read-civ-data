@@ -8,7 +8,8 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
     $SavPath = "${Civ3Path}/Conquests/Saves/Auto/Conquests Autosave ${PSItem} BC.SAV"
     $SavPath
     $Sav = New-Object ReadCivData.QueryCiv3Sav.SavData($SavPath)
-    $Sav.Game.CityCount
+    $Sav.Game
+    # $Sav.Wrld
 
     <#
 
