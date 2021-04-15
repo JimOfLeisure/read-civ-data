@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\QueryCiv3Sav\ReadCivData.QueryCiv3Sav.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Moonsharp" Version="2.0.0" />
   </ItemGroup>
 

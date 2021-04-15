@@ -9,3 +9,8 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
 $Civ3Path
 [ReadCivData.LuaCiv3.Test]::Foo()
 [ReadCivData.LuaCiv3.Test]::DoLua('print "Hello Lua"')
+
+$SavPath = "$Civ3Path/Conquests/Saves/Auto/Conquests Autosave 3950 BC.SAV"
+
+$Lua = New-Object ReadCivData.LuaCiv3.Civ3Script($SavPath)
+
