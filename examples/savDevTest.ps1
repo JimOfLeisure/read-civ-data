@@ -8,9 +8,11 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
     $SavPath = "${Civ3Path}/Conquests/Saves/Auto/Conquests Autosave ${PSItem} BC.SAV"
     $DefaultBicPath = "${Civ3Path}/Conquests/conquests.biq"
     $Sav = New-Object ReadCivData.QueryCiv3Sav.SavData($SavPath, $DefaultBicPath)
-    $Sav.Game
+    # $Sav.Game
     # $Sav.Wrld
-
+    # $Sav.Bic.Bldg.DevTest
+    $Sav.Bic.Bldg[0].RawBytes | Format-Hex;
+    # $Sav.Bic.Bldg | %{ $PSItem.RawBytes }
     <#
 
     $GameOffset = $Sav.SavFile.SectionOffset("GAME", 2)

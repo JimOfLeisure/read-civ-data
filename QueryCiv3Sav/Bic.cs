@@ -61,9 +61,13 @@ namespace ReadCivData.QueryCiv3Sav
     public class BldgSection : ISectionListItem
     {
         public string DevTest;
+        public byte[] RawBytes;
         public void Init(Civ3File bic, int offset, int length)
         {
-            DevTest = "BLDG " + offset.ToString() + " " + length.ToString();
+            DevTest = "BLDG off " + offset.ToString() + " len " + length.ToString();
+            List<byte> ByteList = new List<byte>();
+            for(int i=0; i<length; i++) ByteList.Add(bic.FileData[i+offset]);
+            RawBytes = ByteList.ToArray();
         }
     }
 }

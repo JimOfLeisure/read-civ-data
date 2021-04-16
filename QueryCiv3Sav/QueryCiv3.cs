@@ -9,7 +9,7 @@ namespace ReadCivData.QueryCiv3Sav {
         public int Offset;
     }
     public class Civ3File {
-        protected internal byte[] FileData;
+        public byte[] FileData;
         protected internal Civ3Section[] Sections;
         public bool HasCustomBic {get; protected set;}
         public bool IsGameFile {get; protected set;}
