@@ -10,5 +10,8 @@ $SavPath = "$Civ3Path/Conquests/Saves/Auto/Conquests Autosave 3950 BC.SAV"
 
 $Lua = New-Object ReadCivData.LuaCiv3.Civ3Script($SavPath)
 
-$Result = $Lua.DoString('print(install_path)')
-$Result = $Lua.DoString('print(game.CityCount)')
+$Lua.DoString('
+    print(install_path)
+    print(game.CityCount)
+    print(wrld.WsizID)
+') | Out-Null
