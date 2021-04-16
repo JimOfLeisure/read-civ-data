@@ -25,6 +25,14 @@ namespace ReadCivData.QueryCiv3Sav
         }
         protected void Init()
         {
+            if(Sav.HasCustomBic)
+            {
+                // TODO: Pull BIC from save data
+            }
+            else
+            {
+                Bic = new BicData(DefaultBicPath);
+            }
             Wrld = new WrldSection(this);
             Game = new GameSection(this);
         }
