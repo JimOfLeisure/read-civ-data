@@ -21,7 +21,7 @@ namespace ReadCivData.QueryCiv3Sav {
                 this.Decompress();
             }
             // TODO: Check for CIV3 or BIC header?
-            this.PopulateSections(FileData, Sections);
+            Sections = PopulateSections(FileData);
         }
         // For dev validation only
         public void PrintFirstFourBytes() {
@@ -34,7 +34,7 @@ namespace ReadCivData.QueryCiv3Sav {
             Decompressor.Decompress();
             this.FileData = DecompressedStream.ToArray();
         }
-        protected internal void PopulateSections(byte[] Data, Civ3Section[] sectionList) {
+        protected internal Civ3Section[] PopulateSections(byte[] Data) {
             int Count = 0;
             int Offset = 0;
             List<Civ3Section> MySectionList = new List<Civ3Section>();
@@ -57,7 +57,7 @@ namespace ReadCivData.QueryCiv3Sav {
                 }
             }
             // TODO: Filter junk and dirty data from array (e.g. stray CITYs, non-headers, and such)
-            this.Sections = MySectionList.ToArray();
+            return MySectionList.ToArray();
         }
         public int SectionOffset(string name, int nth) {
             int n = 0;
