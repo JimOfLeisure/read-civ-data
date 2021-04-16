@@ -6,9 +6,9 @@ namespace ReadCivData.LuaCiv3 {
     public class Civ3Script : Script
     {
         private SavData SavFile;
-        public Civ3Script(string savPath)
+        public Civ3Script(string savPath, string defaultBicPath)
         {
-            SavFile = new SavData(savPath);
+            SavFile = new SavData(savPath, defaultBicPath);
             RegisterUserData();
             SetGlobals();
         }

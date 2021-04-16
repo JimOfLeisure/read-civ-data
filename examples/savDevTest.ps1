@@ -6,8 +6,8 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
 
 "4000", "3950" | ForEach-Object {
     $SavPath = "${Civ3Path}/Conquests/Saves/Auto/Conquests Autosave ${PSItem} BC.SAV"
-    $SavPath
-    $Sav = New-Object ReadCivData.QueryCiv3Sav.SavData($SavPath)
+    $DefaultBicPath = "${Civ3Path}/Conquests/conquests.biq"
+    $Sav = New-Object ReadCivData.QueryCiv3Sav.SavData($SavPath, $DefaultBicPath)
     $Sav.Game
     # $Sav.Wrld
 
