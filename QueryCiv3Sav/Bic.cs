@@ -47,6 +47,7 @@ namespace ReadCivData.QueryCiv3Sav
             for(int i=0; i<ItemCount; i++)
             {
                 int ItemLength = Bic.ReadInt32(CurrentOffset);
+                CurrentOffset += 4;
                 T Item = new T();
                 Item.Init(Bic, CurrentOffset, ItemLength);
                 CurrentOffset += ItemLength;
