@@ -28,9 +28,9 @@ namespace ReadCivData.QueryCiv3Sav
                 Offset = Data.Sav.SectionOffset("GAME", 2);
             }
             // TODO: Return Bic sections, not IDs
-            public int DifficultyID{get{ return Data.Sav.ReadInt32(Offset+20); }}
-            public int UnitCount{get{ return Data.Sav.ReadInt32(Offset+28); }}
-            public int CityCount{get{ return Data.Sav.ReadInt32(Offset+32); }}
+            public int DifficultyID{ get => Data.Sav.ReadInt32(Offset+20); }
+            public int UnitCount{ get => Data.Sav.ReadInt32(Offset+28); }
+            public int CityCount{ get => Data.Sav.ReadInt32(Offset+32); }
         }
         public class WrldSection
         {
@@ -43,9 +43,9 @@ namespace ReadCivData.QueryCiv3Sav
                 Offset2 = Data.Sav.SectionOffset("WRLD", 2);
                 Offset3 = Data.Sav.SectionOffset("WRLD", 3);
             }
-            public int ContinentCount{get{ return Data.Sav.ReadInt16(Offset1+4); }}
+            public short ContinentCount{ get => Data.Sav.ReadInt16(Offset1+4); }
             // TODO: Return Bic sections, not IDs
-            public int WsizID{get{ return Data.Sav.ReadInt32(Offset1+234); }}
+            public int WsizID{ get => Data.Sav.ReadInt32(Offset1+234); }
         }
     }
 }
