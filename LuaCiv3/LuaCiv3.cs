@@ -15,8 +15,8 @@ namespace ReadCivData.LuaCiv3 {
         private void RegisterUserData()
         {
             UserData.RegisterType<Civ3File>();
-            UserData.RegisterType<SavData.GameSection>();
-            UserData.RegisterType<SavData.WrldSection>();
+            UserData.RegisterType<GameSection>();
+            UserData.RegisterType<WrldSection>();
             UserData.RegisterType<BldgSection>();
         }
         private void SetGlobals()
