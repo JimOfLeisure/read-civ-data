@@ -22,6 +22,15 @@ namespace ReadCivData.QueryCiv3Sav {
             }
             // TODO: Check for CIV3 or BIC header?
             Sections = PopulateSections(FileData);
+            int BicOffset = SectionOffset("VER#", 1);
+            if((uint)ReadInt32(BicOffset+8, false) == (uint)0xcdcdcdcd)
+            {
+                // No custom BIC in file, use default BIQ
+                Console.WriteLine("Default Bic");
+            }
+            Console.WriteLine(ReadInt32(BicOffset+8, false));
+            Console.WriteLine((uint)ReadInt32(BicOffset+8, false));
+            Console.WriteLine((uint)0xcdcdcdcd);
         }
         // For dev validation only
         public void PrintFirstFourBytes() {
@@ -75,6 +84,7 @@ namespace ReadCivData.QueryCiv3Sav {
         // TODO: Force little endian conversion on big endian systems
         //  although anticipated Intel and ARM targets are little endian, so maybe not important
         // TODO: Review default values of signed bool
+        // FIXME: signed int32s aren't working. Need to cast the result as uint instead
         public int ReadInt32(int offset, bool signed = true) {
             if (signed) {
                 return BitConverter.ToInt32(this.FileData, offset);
