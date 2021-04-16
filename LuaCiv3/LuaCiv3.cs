@@ -17,6 +17,7 @@ namespace ReadCivData.LuaCiv3 {
             UserData.RegisterType<Civ3File>();
             UserData.RegisterType<SavData.GameSection>();
             UserData.RegisterType<SavData.WrldSection>();
+            UserData.RegisterType<BldgSection>();
         }
         private void SetGlobals()
         {
@@ -24,6 +25,7 @@ namespace ReadCivData.LuaCiv3 {
             Globals["sav"] = SavFile.Sav;
             Globals["game"] = SavFile.Game;
             Globals["wrld"] = SavFile.Wrld;
+            Globals["bldg"] = SavFile.Bic.Bldg;
         }
     }
 }

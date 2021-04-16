@@ -14,4 +14,7 @@ $Lua.DoString('
     print(install_path)
     print(game.CityCount)
     print(wrld.WsizID)
+    print(bldg)
+    print(bldg[1])
+    print(bldg[1].DevTest)
 ') | Out-Null
