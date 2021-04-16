@@ -23,14 +23,11 @@ namespace ReadCivData.QueryCiv3Sav {
             // TODO: Check for CIV3 or BIC header?
             Sections = PopulateSections(FileData);
             int BicOffset = SectionOffset("VER#", 1);
-            if((uint)ReadInt32(BicOffset+8, false) == (uint)0xcdcdcdcd)
+            if((uint)ReadInt32(BicOffset+8) == (uint)0xcdcdcdcd)
             {
                 // No custom BIC in file, use default BIQ
                 Console.WriteLine("Default Bic");
             }
-            Console.WriteLine(ReadInt32(BicOffset+8, false));
-            Console.WriteLine((uint)ReadInt32(BicOffset+8, false));
-            Console.WriteLine((uint)0xcdcdcdcd);
         }
         // For dev validation only
         public void PrintFirstFourBytes() {
@@ -83,21 +80,11 @@ namespace ReadCivData.QueryCiv3Sav {
         }
         // TODO: Force little endian conversion on big endian systems
         //  although anticipated Intel and ARM targets are little endian, so maybe not important
-        // TODO: Review default values of signed bool
-        // FIXME: signed int32s aren't working. Need to cast the result as uint instead
-        public int ReadInt32(int offset, bool signed = true) {
-            if (signed) {
-                return BitConverter.ToInt32(this.FileData, offset);
-            }
-            return (int)BitConverter.ToUInt32(this.FileData, offset);
-        }
-        public int ReadInt16(int offset, bool signed = false) {
-            if (signed) {
-                return BitConverter.ToInt16(this.FileData, offset);
-            }
-            return (int)BitConverter.ToUInt16(this.FileData, offset);
-        }
-        // TODO: Figure out if signed byte is needed anywhere
-        public int ReadByte(int offset) => (int)this.FileData[offset];
+        // NOTE: Cast result as (uint) if unsigned desired
+        public int ReadInt32(int offset) => BitConverter.ToInt32(this.FileData, offset);
+        // NOTE: Cast result as (ushort) if unsigned desired
+        public short ReadInt16(int offset) => BitConverter.ToInt16(this.FileData, offset);
+        // NOTE: Cast result as (sbyte) if signed desired
+        public byte ReadByte(int offset) => this.FileData[offset];
     }
 }

@@ -21,7 +21,7 @@ namespace ReadCivData.LuaCiv3 {
         private void SetGlobals()
         {
             Globals["install_path"] = ReadCivData.UtilsCiv3.Util.GetCiv3Path();
-            Globals["sav"] = SavFile.SavFile;
+            Globals["sav"] = SavFile.Sav;
             Globals["game"] = SavFile.Game;
             Globals["wrld"] = SavFile.Wrld;
         }
