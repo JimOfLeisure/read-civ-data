@@ -5,7 +5,7 @@ namespace ReadCivData.QueryCiv3Sav
 {
     public class BicData
     {
-        BldgSection[] Bldg;
+        public BldgSection[] Bldg;
         public Civ3File Bic;
         public BicData(byte[] bicBytes)
         {
@@ -50,6 +50,7 @@ namespace ReadCivData.QueryCiv3Sav
                 CurrentOffset += 4;
                 T Item = new T();
                 Item.Init(Bic, CurrentOffset, ItemLength);
+                OutList.Add(Item);
                 CurrentOffset += ItemLength;
 
             }
@@ -59,10 +60,10 @@ namespace ReadCivData.QueryCiv3Sav
     }
     public class BldgSection : ISectionListItem
     {
-        string DevTest;
+        public string DevTest;
         public void Init(Civ3File bic, int offset, int length)
         {
-            DevTest = "foo " + offset.ToString();
+            DevTest = "BLDG " + offset.ToString() + " " + length.ToString();
         }
     }
 }
