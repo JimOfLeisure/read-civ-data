@@ -27,7 +27,7 @@ namespace ReadCivData.QueryCiv3Sav
         {
             if(Sav.HasCustomBic)
             {
-                // TODO: Pull BIC from save data
+                Bic = new BicData(Sav.CustomBic);
             }
             else
             {
