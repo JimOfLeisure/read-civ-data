@@ -11,13 +11,17 @@ namespace ReadCivData.QueryCiv3Sav {
     public class Civ3File {
         protected internal byte[] FileData;
         protected internal Civ3Section[] Sections;
+        protected internal byte[] CurrentBicData;
+        protected internal Civ3Section[] CurrentBicSections;
+        protected internal byte[] DefaultBicData;
+        protected internal Civ3Section[] DefaultBicSections;
         public void Load(string pathName) {
             this.FileData = File.ReadAllBytes(pathName);
             if (FileData[0] == 0x00 && (FileData[1] == 0x04 || FileData[1] == 0x05 || FileData[1] == 0x06)) {
                 this.Decompress();
             }
             // TODO: Check for CIV3 or BIC header?
-            this.PopulateSections();
+            this.PopulateSections(FileData, Sections);
         }
         // For dev validation only
         public void PrintFirstFourBytes() {
@@ -30,13 +34,13 @@ namespace ReadCivData.QueryCiv3Sav {
             Decompressor.Decompress();
             this.FileData = DecompressedStream.ToArray();
         }
-        protected internal void PopulateSections() {
+        protected internal void PopulateSections(byte[] Data, Civ3Section[] sectionList) {
             int Count = 0;
             int Offset = 0;
-            List<Civ3Section> SectionList = new List<Civ3Section>();
+            List<Civ3Section> MySectionList = new List<Civ3Section>();
             System.Text.ASCIIEncoding ascii = new System.Text.ASCIIEncoding();
-            for (int i = 0; i < this.FileData.Length; i++) {
-                if (FileData[i] < 0x20 || FileData[i] > 0x5a) {
+            for (int i = 0; i < Data.Length; i++) {
+                if (Data[i] < 0x20 || Data[i] > 0x5a) {
                     Count = 0;
                 } else {
                     if (Count == 0) {
@@ -48,13 +52,12 @@ namespace ReadCivData.QueryCiv3Sav {
                     Count = 0;
                     Civ3Section Section = new Civ3Section();
                     Section.Offset = Offset;
-                    Section.Name = ascii.GetString(this.FileData, Offset, 4);
-                    SectionList.Add(Section);
-                    // Console.WriteLine(Section.Name + " " + Section.Offset);
+                    Section.Name = ascii.GetString(Data, Offset, 4);
+                    MySectionList.Add(Section);
                 }
             }
             // TODO: Filter junk and dirty data from array (e.g. stray CITYs, non-headers, and such)
-            this.Sections = SectionList.ToArray();
+            this.Sections = MySectionList.ToArray();
         }
         public int SectionOffset(string name, int nth) {
             int n = 0;
