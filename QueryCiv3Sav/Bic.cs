@@ -22,7 +22,7 @@ namespace ReadCivData.QueryCiv3Sav
         {
             //
         }
-        public class ListSection<T>
+        public class ListSection<T> where T : ISectionListItem<T>, new()
         {
             Civ3File Bic;
             int Offset;
@@ -41,7 +41,7 @@ namespace ReadCivData.QueryCiv3Sav
                 {
                     int ItemLength = Bic.ReadInt32(CurrentOffset);
                     T Item = new T();
-                    T.Init(Bic, CurrentOffset, ItemLength);
+                    Item.Init(Bic, CurrentOffset, ItemLength);
                     CurrentOffset += ItemLength;
 
                 }
@@ -49,5 +49,10 @@ namespace ReadCivData.QueryCiv3Sav
             }}
             public void Init(Civ3File bic, int offset, int length){}
         }
+    }
+    public interface ISectionListItem<T>
+    {
+        void Init(Civ3File bic, int offset, int length);
+
     }
 }
