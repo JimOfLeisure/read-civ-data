@@ -11,36 +11,42 @@ namespace ReadCivData.QueryCiv3Sav {
     public class Civ3File {
         protected internal byte[] FileData;
         protected internal Civ3Section[] Sections;
-        protected internal byte[] CurrentBicData;
-        protected internal Civ3Section[] CurrentBicSections;
-        protected internal byte[] DefaultBicData;
-        protected internal Civ3Section[] DefaultBicSections;
-        public void Load(string pathName) {
-            this.FileData = File.ReadAllBytes(pathName);
-            if (FileData[0] == 0x00 && (FileData[1] == 0x04 || FileData[1] == 0x05 || FileData[1] == 0x06)) {
-                this.Decompress();
-            }
+        public bool CustomBic {get; protected set;}
+        public void Load(byte[] fileBytes)
+        {
+            this.FileData = fileBytes;
             // TODO: Check for CIV3 or BIC header?
             Sections = PopulateSections(FileData);
             int BicOffset = SectionOffset("VER#", 1);
-            if((uint)ReadInt32(BicOffset+8) == (uint)0xcdcdcdcd)
+            CustomBic = (uint)ReadInt32(BicOffset+8) != (uint)0xcdcdcdcd;
+        }
+        public void Load(string pathName)
+        {
+            byte[] MyFileData = File.ReadAllBytes(pathName);
+            if (MyFileData[0] == 0x00 && (MyFileData[1] == 0x04 || MyFileData[1] == 0x05 || MyFileData[1] == 0x06))
             {
-                // No custom BIC in file, use default BIQ
-                Console.WriteLine("Default Bic");
+                Load(Decompress(MyFileData));
+            }
+            else
+            {
+                Load(MyFileData);
             }
         }
         // For dev validation only
-        public void PrintFirstFourBytes() {
+        public void PrintFirstFourBytes()
+        {
             System.Text.ASCIIEncoding ascii = new System.Text.ASCIIEncoding();
             Console.WriteLine(ascii.GetString(this.FileData, 0, 4));
         }
-        protected internal void Decompress() {
+        protected internal byte[] Decompress(byte[] compressedBytes)
+        {
             MemoryStream DecompressedStream = new MemoryStream();
-            BlastDecoder Decompressor = new BlastDecoder(new MemoryStream(this.FileData, writable: false), DecompressedStream);
+            BlastDecoder Decompressor = new BlastDecoder(new MemoryStream(compressedBytes, writable: false), DecompressedStream);
             Decompressor.Decompress();
-            this.FileData = DecompressedStream.ToArray();
+            return DecompressedStream.ToArray();
         }
-        protected internal Civ3Section[] PopulateSections(byte[] Data) {
+        protected internal Civ3Section[] PopulateSections(byte[] Data)
+        {
             int Count = 0;
             int Offset = 0;
             List<Civ3Section> MySectionList = new List<Civ3Section>();
@@ -65,7 +71,8 @@ namespace ReadCivData.QueryCiv3Sav {
             // TODO: Filter junk and dirty data from array (e.g. stray CITYs, non-headers, and such)
             return MySectionList.ToArray();
         }
-        public int SectionOffset(string name, int nth) {
+        public int SectionOffset(string name, int nth)
+        {
             int n = 0;
             for (int i = 0; i < this.Sections.Length; i++) {
                 if (this.Sections[i].Name == name) {
