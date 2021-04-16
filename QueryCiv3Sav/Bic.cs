@@ -5,6 +5,7 @@ namespace ReadCivData.QueryCiv3Sav
 {
     public class BicData
     {
+        BldgSection[] Bldg;
         public Civ3File Bic;
         public BicData(byte[] bicBytes)
         {
@@ -20,39 +21,47 @@ namespace ReadCivData.QueryCiv3Sav
         }
         public void Init()
         {
-            //
-        }
-        public class ListSection<T> where T : ISectionListItem<T>, new()
-        {
-            Civ3File Bic;
-            int Offset;
-            int ItemCount;
-            public ListSection(Civ3File bic, int offset)
-            {
-                Bic = bic;
-                ItemCount = Bic.ReadInt32(offset);
-                Offset = offset;
-            }
-            public List<T> Sections
-            { get {
-                int CurrentOffset = Offset + 4;
-                List<T> OutList = new List<T>();
-                for(int i=0; i<ItemCount; i++)
-                {
-                    int ItemLength = Bic.ReadInt32(CurrentOffset);
-                    T Item = new T();
-                    Item.Init(Bic, CurrentOffset, ItemLength);
-                    CurrentOffset += ItemLength;
-
-                }
-                return OutList;
-            }}
-            public void Init(Civ3File bic, int offset, int length){}
+            Bldg = (new ListSection<BldgSection>(Bic, Bic.SectionOffset("BLDG", 1))).Sections.ToArray();
         }
     }
-    public interface ISectionListItem<T>
+    public interface ISectionListItem
     {
         void Init(Civ3File bic, int offset, int length);
 
+    }
+    public class ListSection<T> where T : ISectionListItem, new()
+    {
+        Civ3File Bic;
+        int Offset;
+        int ItemCount;
+        public ListSection(Civ3File bic, int offset)
+        {
+            Bic = bic;
+            ItemCount = Bic.ReadInt32(offset);
+            Offset = offset;
+        }
+        public List<T> Sections
+        { get {
+            int CurrentOffset = Offset + 4;
+            List<T> OutList = new List<T>();
+            for(int i=0; i<ItemCount; i++)
+            {
+                int ItemLength = Bic.ReadInt32(CurrentOffset);
+                T Item = new T();
+                Item.Init(Bic, CurrentOffset, ItemLength);
+                CurrentOffset += ItemLength;
+
+            }
+            return OutList;
+        }}
+        public void Init(Civ3File bic, int offset, int length){}
+    }
+    public class BldgSection : ISectionListItem
+    {
+        string DevTest;
+        public void Init(Civ3File bic, int offset, int length)
+        {
+            DevTest = "foo " + offset.ToString();
+        }
     }
 }
