@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ReadCivData.QueryCiv3Sav
 {
@@ -36,5 +37,14 @@ namespace ReadCivData.QueryCiv3Sav
             Wrld = new WrldSection(this);
             Game = new GameSection(this);
         }
+        public MapTile[] Tile
+        { get {
+            int TileOffset = Sav.SectionOffset("TILE", 1);
+            int TileLength = 212;
+            int TileCount = Wrld.Height * (Wrld.Width / 2);
+            List<MapTile> TileList = new List<MapTile>();
+            for(int i=0; i< TileCount; i++, TileOffset += TileLength) TileList.Add(new MapTile(this, TileOffset));
+            return TileList.ToArray();
+        }}
     }
 }
