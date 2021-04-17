@@ -10,7 +10,9 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
     $Sav = New-Object ReadCivData.QueryCiv3Sav.SavData($SavPath, $DefaultBicPath)
     
     $Sav.City.Name # RawBytes | Format-Hex
-
+    $Sav.City.StoredFood
+    $Sav.City.StoredShields
+    $Sav.City.CitizenCount
     "========"
 }
 

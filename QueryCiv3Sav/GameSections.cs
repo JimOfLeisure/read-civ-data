@@ -127,9 +127,15 @@ namespace ReadCivData.QueryCiv3Sav
             Offset = offset;
         }
         // Unsure of length
-        public string Name { get => Data.Sav.GetString(Offset+0x184, 20); }
+        public int CityID { get => Data.Sav.ReadInt32(Offset+4); }
         public int X { get => Data.Sav.ReadInt16(Offset+8); }
         public int Y { get => Data.Sav.ReadInt16(Offset+10); }
+        public int RaceID { get => Data.Sav.ReadInt32(Offset+12); }
+        public RaceSection Race { get => Data.Bic.Race[RaceID]; }
+        public int StoredFood { get => Data.Sav.ReadInt32(Offset+36); }
+        public int StoredShields { get => Data.Sav.ReadInt32(Offset+40); }
+        public string Name { get => Data.Sav.GetString(Offset+0x184, 20); }
+        public int CitizenCount { get => Data.Sav.ReadInt32(Offset+0x224); }
         public byte[] RawBytes { get => Data.Sav.GetBytes(Offset, 1024); }
     }
 }
