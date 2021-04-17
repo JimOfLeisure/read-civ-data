@@ -24,12 +24,21 @@ namespace ReadCivData.QueryCiv3Sav
             Bldg = (new ListSection<BldgSection>(Bic, Bic.SectionOffset("BLDG", 1))).Sections.ToArray();
         }
     }
-    public interface ISectionListItem
+    public class SectionListItem
     {
-        void Init(Civ3File bic, int offset, int length);
-
+        protected Civ3File Bic;
+        public int Offset { get; protected set; }
+        public int Length { get; protected set; }
+        public void Init(Civ3File bic, int offset, int length)
+        {
+            Bic = bic;
+            Offset = offset;
+            Length = length;
+        }
+        public string DevTest { get => "BLDG off " + Offset.ToString() + " len " + Length.ToString(); }
+        public byte[] RawBytes { get => Bic.GetBytes(Offset, Length); }
     }
-    public class ListSection<T> where T : ISectionListItem, new()
+    public class ListSection<T> where T : SectionListItem, new()
     {
         Civ3File Bic;
         int Offset;
@@ -58,35 +67,13 @@ namespace ReadCivData.QueryCiv3Sav
         }}
         public void Init(Civ3File bic, int offset, int length){}
     }
-    public class BldgSection : ISectionListItem
+    public class BldgSection : SectionListItem
     {
-        protected Civ3File Bic;
-        public int Offset { get; protected set; }
-        public int Length { get; protected set; }
-        public void Init(Civ3File bic, int offset, int length)
-        {
-            Bic = bic;
-            Offset = offset;
-            Length = length;
-        }
-        public string DevTest { get => "BLDG off " + Offset.ToString() + " len " + Length.ToString(); }
-        public byte[] RawBytes { get => Bic.GetBytes(Offset, Length); }
         public string Name { get => Bic.GetString(Offset+64, 32); }
         // TODO: I'm sure this is a dumb name
         public string Reference { get => Bic.GetString(Offset+96, 32); }
     }
-    public class CtznSection : ISectionListItem
+    public class CtznSection : SectionListItem
     {
-        protected Civ3File Bic;
-        public int Offset { get; protected set; }
-        public int Length { get; protected set; }
-        public void Init(Civ3File bic, int offset, int length)
-        {
-            Bic = bic;
-            Offset = offset;
-            Length = length;
-        }
-        public string DevTest { get => "CTZN off " + Offset.ToString() + " len " + Length.ToString(); }
-        public byte[] RawBytes { get => Bic.GetBytes(Offset, Length); }
     }
 }
