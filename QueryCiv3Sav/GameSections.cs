@@ -74,6 +74,18 @@ namespace ReadCivData.QueryCiv3Sav
         public int BaseTerrain { get => Terrain & 0x0f; }
         public int OverlayTerrain { get => (Terrain & 0xf0) >> 4; }
     }
+    public class ContItem
+    {
+        protected SavData Data;
+        protected int Offset;
+        public ContItem(SavData data, int offset)
+        {
+            Data = data;
+            Offset = offset;
+        }
+        public bool IsLand { get => Data.Sav.ReadInt32(Offset+4) != 0; }
+        public int TileCount { get => Data.Sav.ReadInt32(Offset+8); }
+    }
     public class LeaderItem
     // NOTE: If relative offset is wrong, try adjusting up (or down) by 4
     //  At various phases of my project history I've counted from different base points

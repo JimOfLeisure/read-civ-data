@@ -46,6 +46,17 @@ namespace ReadCivData.QueryCiv3Sav
             for(int i=0; i< TileCount; i++, TileOffset += TileLength) TileList.Add(new MapTile(this, TileOffset));
             return TileList.ToArray();
         }}
+        public ContItem[] Cont
+        { get {
+            int ContCount = Wrld.ContinentCount;
+            List<ContItem> LeadList = new List<ContItem>();
+            for(int i=0; i< ContCount; i++)
+            {
+                int LeadOffset = Sav.SectionOffset("CONT", i+1);
+                LeadList.Add(new ContItem(this, LeadOffset));
+            }
+            return LeadList.ToArray();
+        }}
         public LeaderItem[] Lead
         { get {
             int LeadCount = 32;
