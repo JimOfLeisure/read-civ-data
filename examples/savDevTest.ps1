@@ -13,7 +13,7 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
     # $Sav.Bic.Bldg.DevTest
     $Sav.Bic.Bldg[0].RawBytes | Format-Hex;
     
-    $Sav.Bic.Bldg | %{ $PSItem.Reference }
+    $Sav.Game.TechCivMask # | %{ $PSItem.Reference }
     <#
 
     $GameOffset = $Sav.SavFile.SectionOffset("GAME", 2)
