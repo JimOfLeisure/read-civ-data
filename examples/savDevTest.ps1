@@ -9,10 +9,10 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
     $DefaultBicPath = "${Civ3Path}/Conquests/conquests.biq"
     $Sav = New-Object ReadCivData.QueryCiv3Sav.SavData($SavPath, $DefaultBicPath)
     
-    $Sav.Wrld.Height
-    $Sav.Wrld.Width
-    $Sav.Tile[0].Terrain
-    $Sav.Tile[0].BaseTerrain
-    $Sav.Tile[0].OverlayTerrain
+    $Sav.Lead | Select-Object -First 8 | ForEach-Object {
+        # $PSItem.RaceID
+        $PSItem.CityCount
+    }
+    "========"
 }
 
