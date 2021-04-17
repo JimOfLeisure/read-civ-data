@@ -75,4 +75,18 @@ namespace ReadCivData.QueryCiv3Sav
         // TODO: I'm sure this is a dumb name
         public string Reference { get => Bic.GetString(Offset+96, 32); }
     }
+    public class CtznSection : ISectionListItem
+    {
+        protected Civ3File Bic;
+        public int Offset { get; protected set; }
+        public int Length { get; protected set; }
+        public void Init(Civ3File bic, int offset, int length)
+        {
+            Bic = bic;
+            Offset = offset;
+            Length = length;
+        }
+        public string DevTest { get => "CTZN off " + Offset.ToString() + " len " + Length.ToString(); }
+        public byte[] RawBytes { get => Bic.GetBytes(Offset, Length); }
+    }
 }
