@@ -60,17 +60,19 @@ namespace ReadCivData.QueryCiv3Sav
     }
     public class BldgSection : ISectionListItem
     {
-        public string Name;
-        // TODO: I'm sure this is a dumb name
-        public string Reference;
-        public string DevTest;
-        public byte[] RawBytes;
+        protected Civ3File Bic;
+        public int Offset { get; protected set; }
+        public int Length { get; protected set; }
         public void Init(Civ3File bic, int offset, int length)
         {
-            DevTest = "BLDG off " + offset.ToString() + " len " + length.ToString();
-            RawBytes = bic.GetBytes(offset, length);
-            Name = bic.GetString(offset+64, 32);
-            Reference = bic.GetString(offset+96, 32);
+            Bic = bic;
+            Offset = offset;
+            Length = length;
         }
+        public string DevTest { get => "BLDG off " + Offset.ToString() + " len " + Length.ToString(); }
+        public byte[] RawBytes { get => Bic.GetBytes(Offset, Length); }
+        public string Name { get => Bic.GetString(Offset+64, 32); }
+        // TODO: I'm sure this is a dumb name
+        public string Reference { get => Bic.GetString(Offset+96, 32); }
     }
 }
