@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using Blast;
+using System.Text.RegularExpressions;
 
 namespace ReadCivData.QueryCiv3Sav {
     public class Civ3Section {
@@ -132,7 +133,10 @@ namespace ReadCivData.QueryCiv3Sav {
         public string GetString(int offset, int length)
         {
             byte[] StringBytes = GetBytes(offset, length);
-            return System.Text.Encoding.GetEncoding(Civ3StringEncoding).GetString(StringBytes);
+            string Out = System.Text.Encoding.GetEncoding(Civ3StringEncoding).GetString(StringBytes);
+            Regex TrimAfterNull = new Regex(@"^[^\0]*");
+            Match NoNullMatch = TrimAfterNull.Match(Out);
+            return NoNullMatch.Value;
         }
     }
 }

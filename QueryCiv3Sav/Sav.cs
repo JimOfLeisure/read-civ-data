@@ -46,6 +46,7 @@ namespace ReadCivData.QueryCiv3Sav
             for(int i=0; i< TileCount; i++, TileOffset += TileLength) TileList.Add(new MapTile(this, TileOffset));
             return TileList.ToArray();
         }}
+        // TODO: Use ListSection for this?
         public ContItem[] Cont
         { get {
             int ContCount = Wrld.ContinentCount;
@@ -67,6 +68,25 @@ namespace ReadCivData.QueryCiv3Sav
                 LeadList.Add(new LeaderItem(this, LeadOffset));
             }
             return LeadList.ToArray();
+        }}
+        public CityItem[] City
+        { get {
+            // Since "CITY" can sometimes appear in dirty data, let's find the first
+            //   "CITY" with 0x00000088 after it
+            int CityOffset = 0;
+            for(int i=0, chk=0; chk!=0x88; i++)
+            {
+                CityOffset = Sav.SectionOffset("CITY", i+1);
+                chk = Sav.ReadInt32(CityOffset);
+            }
+            int CityCount = 1; // TEMP HACK // Game.CityCount;
+
+            List<CityItem> CityList = new List<CityItem>();
+            for(int i=0; i< CityCount; i++)
+            {
+                CityList.Add(new CityItem(this, CityOffset));
+            }
+            return CityList.ToArray();
         }}
     }
 }

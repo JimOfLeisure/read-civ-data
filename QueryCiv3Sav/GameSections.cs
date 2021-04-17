@@ -117,4 +117,19 @@ namespace ReadCivData.QueryCiv3Sav
         public int MilitaryUnitCount { get => Data.Sav.ReadInt32(Offset+376); }
         public int CityCount { get => Data.Sav.ReadInt32(Offset+380); }
     }
+    public class CityItem
+    {
+        protected SavData Data;
+        protected int Offset;
+        public CityItem(SavData data, int offset)
+        {
+            Data = data;
+            Offset = offset;
+        }
+        // Unsure of length
+        public string Name { get => Data.Sav.GetString(Offset+0x184, 20); }
+        public int X { get => Data.Sav.ReadInt16(Offset+8); }
+        public int Y { get => Data.Sav.ReadInt16(Offset+10); }
+        public byte[] RawBytes { get => Data.Sav.GetBytes(Offset, 1024); }
+    }
 }
