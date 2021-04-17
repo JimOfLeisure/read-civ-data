@@ -9,7 +9,7 @@ namespace ReadCivData.QueryCiv3Sav {
         public int Offset;
     }
     public class Civ3File {
-        public byte[] FileData;
+        protected internal byte[] FileData;
         protected internal Civ3Section[] Sections;
         public bool HasCustomBic {get; protected set;}
         public bool IsGameFile {get; protected set;}
@@ -122,5 +122,16 @@ namespace ReadCivData.QueryCiv3Sav {
         public short ReadInt16(int offset) => BitConverter.ToInt16(this.FileData, offset);
         // NOTE: Cast result as (sbyte) if signed desired
         public byte ReadByte(int offset) => this.FileData[offset];
+        public byte[] GetBytes(int offset, int length)
+        {
+            List<byte> Out = new List<byte>();
+            for(int i=0; i<length; i++) Out.Add(FileData[i+offset]);
+            return Out.ToArray();
+        }
+        public string GetString(int offset, int length)
+        {
+            byte[] StringBytes = GetBytes(offset, length);
+            return System.Text.Encoding.GetEncoding(1252).GetString(StringBytes);
+        }
     }
 }
