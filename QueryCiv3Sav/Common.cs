@@ -14,7 +14,7 @@ namespace ReadCivData.QueryCiv3Sav
             Offset = offset;
             Length = length;
         }
-        public string DevTest { get => "BLDG off " + Offset.ToString() + " len " + Length.ToString(); }
+        public string DevTest { get => "SectionListItem off " + Offset.ToString() + " len " + Length.ToString(); }
         public byte[] RawBytes { get => Bic.GetBytes(Offset, Length); }
     }
     public class ListSection<T> where T : SectionListItem, new()
