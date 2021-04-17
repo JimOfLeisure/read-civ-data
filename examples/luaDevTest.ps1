@@ -17,4 +17,5 @@ $Lua.DoString('
     print(bldg)
     print(bldg[1])
     print(bldg[1].DevTest)
+    print(city[1].Name)
 ') | Out-Null

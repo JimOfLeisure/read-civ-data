@@ -17,6 +17,11 @@ namespace ReadCivData.LuaCiv3 {
             UserData.RegisterType<Civ3File>();
             UserData.RegisterType<GameSection>();
             UserData.RegisterType<WrldSection>();
+            UserData.RegisterType<MapTile>();
+            UserData.RegisterType<ContItem>();
+            UserData.RegisterType<LeaderItem>();
+            UserData.RegisterType<CityItem>();
+            
             UserData.RegisterType<BldgSection>();
             UserData.RegisterType<CtznSection>();
             UserData.RegisterType<CultSection>();
@@ -40,6 +45,11 @@ namespace ReadCivData.LuaCiv3 {
             Globals["sav"] = SavFile.Sav;
             Globals["game"] = SavFile.Game;
             Globals["wrld"] = SavFile.Wrld;
+            Globals["tile"] = SavFile.Tile;
+            Globals["cont"] = SavFile.Cont;
+            Globals["lead"] = SavFile.Lead;
+            Globals["city"] = SavFile.City;
+
             Globals["bldg"] = SavFile.Bic.Bldg;
             Globals["ctzn"] = SavFile.Bic.Ctzn;
             Globals["cult"] = SavFile.Bic.Cult;
