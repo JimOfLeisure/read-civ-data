@@ -9,6 +9,7 @@ namespace ReadCivData.QueryCiv3Sav {
         public int Offset;
     }
     public class Civ3File {
+        public int Civ3StringEncoding = 1252;
         protected internal byte[] FileData;
         protected internal Civ3Section[] Sections;
         public bool HasCustomBic {get; protected set;}
@@ -131,7 +132,7 @@ namespace ReadCivData.QueryCiv3Sav {
         public string GetString(int offset, int length)
         {
             byte[] StringBytes = GetBytes(offset, length);
-            return System.Text.Encoding.GetEncoding(1252).GetString(StringBytes);
+            return System.Text.Encoding.GetEncoding(Civ3StringEncoding).GetString(StringBytes);
         }
     }
 }
