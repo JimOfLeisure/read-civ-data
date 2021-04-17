@@ -7,7 +7,7 @@ namespace ReadCivData.QueryCiv3Sav
     {
         private int Offset;
         private SavData Data;
-        public GameSection(SavData sav) //Civ3File save, int continentCount)
+        public GameSection(SavData sav)
         // Need to know continent count for some offsets, not sure if it's somewhere in Game so grabbing it from Wrld
         {
             Data = sav;
