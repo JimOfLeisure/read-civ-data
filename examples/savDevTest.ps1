@@ -13,6 +13,7 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
     $Sav.City.StoredFood
     $Sav.City.StoredShields
     $Sav.City.CitizenCount
+    $Sav.City.Ctzn.RawBytes | Format-Hex
     "========"
 }
 

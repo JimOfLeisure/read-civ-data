@@ -81,12 +81,14 @@ namespace ReadCivData.QueryCiv3Sav
             }
             int CityCount = 1; // TEMP HACK // Game.CityCount;
 
-            List<CityItem> CityList = new List<CityItem>();
+            CityItem[] CityList = new CityItem[CityCount];
             for(int i=0; i< CityCount; i++)
             {
-                CityList.Add(new CityItem(this, CityOffset));
+                CityList[i] = new CityItem(this, CityOffset);
+                // incomplete; still need to account for bytes after Ctzn and list w/count after buildings stats
+                CityOffset += 0x228 + (CityList[i].CitizenCount * 300) + (Bic.Bldg.Length * 8) + 0x30;
             }
-            return CityList.ToArray();
+            return CityList;
         }}
     }
 }
