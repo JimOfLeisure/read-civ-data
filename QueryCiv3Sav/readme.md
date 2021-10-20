@@ -12,6 +12,12 @@ The core works. It will read in a SAV or BIQ file in byte array format, index th
 
 I am not planning on immediately implementing all the detailed decoding I've done in the Go library until I figure out the final form and use of the extracted data.
 
+2021-10-19 Update: Returning to this after a few months away, I had to figure out where I left off. The SAV portion of the data may be up to parity with my Go code, but I am not sure of that yet. The BIC portion is reading the generic section lists and getting BLDG names, but that's it so far.
+
+I like the extraction API which is classes for each section with a pointer to the raw data, a section offset, and getters for the data. This should allow future flexibility as I learn more of the data. Ideally eventually each section could be called with the offset where the last left off, but until then there is the sectionheader offset seek method.
+
+The main downside of this approach is that adding new data for writing out is not easy, but that was never my plan, and if I find a need to write more data to a save–as opposed to just changing data in-place–it can be handled on a case-by-case basis, and other reference IDs and counters may need updating in the process.
+
 ## Build
 
 - If cloned via git, `git submodule init` and then `git submodule update` to fetch the Blast code
