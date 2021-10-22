@@ -18,6 +18,10 @@ I like the extraction API which is classes for each section with a pointer to th
 
 The main downside of this approach is that adding new data for writing out is not easy, but that was never my plan, and if I find a need to write more data to a save–as opposed to just changing data in-place–it can be handled on a case-by-case basis, and other reference IDs and counters may need updating in the process.
 
+2021-10-22 Update: Overthinking this code is preventing me from moving forward with short-term plans. I eventually want a way to expose the game data to user-generated script while hiding the methods to load files and change values, but it's not important short term. I also would like to have a non-spoiling interface to expose, but again not important immediately.
+
+So I anticipate in the future defining one or more interfaces, and some utility that uses the base class today may want to use the future interface. In general I am happy with the functionality and structure of the current code, but in the future it will refactor some to allow for differently-privileged use cases for the same data and methods.
+
 ## Build
 
 - If cloned via git, `git submodule init` and then `git submodule update` to fetch the Blast code

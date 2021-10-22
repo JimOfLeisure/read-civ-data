@@ -10,6 +10,8 @@ namespace ReadCivData.QueryCiv3Sav {
         public int Offset;
     }
     public class Civ3File {
+        // Encoding code page ID; 1252 is Civ3 encoding for US language version
+        //   See https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=net-5.0 for other values
         public int Civ3StringEncoding = 1252;
         protected internal byte[] FileData;
         protected internal Civ3Section[] Sections;
@@ -130,6 +132,7 @@ namespace ReadCivData.QueryCiv3Sav {
             for(int i=0; i<length; i++) Out.Add(FileData[i+offset]);
             return Out.ToArray();
         }
+        // NOTE: Tried to parameterize encoding with default of Civ3StringEncoding, but default must be compile-time constant
         public string GetString(int offset, int length)
         {
             byte[] StringBytes = GetBytes(offset, length);
