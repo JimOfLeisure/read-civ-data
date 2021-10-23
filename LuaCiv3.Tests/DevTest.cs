@@ -10,9 +10,22 @@ namespace LuaCiv3.Tests
         [Fact]
         public void Test1()
         {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             Console.WriteLine("Test stub");
             string Civ3Path = ReadCivData.UtilsCiv3.Util.GetCiv3Path();
             Console.WriteLine(Civ3Path);
+            string SavPath = Civ3Path + "/Conquests/Saves/Auto/Conquests Autosave 3950 BC.SAV";
+            string DefaultBicPath = Civ3Path + "/Conquests/conquests.biq";
+            Civ3Script Lua = new Civ3Script(SavPath, DefaultBicPath);
+            Lua.DoString(@"
+    print(install_path)
+    print(game.CityCount)
+    print(wrld.WsizID)
+    print(bldg)
+    print(bldg[1].Name)
+    print(bldg[1].DevTest)
+    print(city[1].Name)
+");
         }
     }
 }
