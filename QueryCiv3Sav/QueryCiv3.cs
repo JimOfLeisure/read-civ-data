@@ -1,5 +1,5 @@
 using System;
-using System.IO;
+// using System.IO;
 using System.Collections.Generic;
 using Blast;
 using System.Text.RegularExpressions;
@@ -35,6 +35,7 @@ namespace ReadCivData.QueryCiv3Sav {
                 }
             }
         }
+        /*
         public void Load(string pathName)
         {
             byte[] MyFileData = File.ReadAllBytes(pathName);
@@ -47,6 +48,7 @@ namespace ReadCivData.QueryCiv3Sav {
                 Load(MyFileData);
             }
         }
+        */
         public byte[] CustomBic
         { get {
             if(HasCustomBic)
@@ -71,6 +73,7 @@ namespace ReadCivData.QueryCiv3Sav {
             }
             return null;
         }}
+        /*
         protected internal byte[] Decompress(byte[] compressedBytes)
         {
             MemoryStream DecompressedStream = new MemoryStream();
@@ -78,6 +81,7 @@ namespace ReadCivData.QueryCiv3Sav {
             Decompressor.Decompress();
             return DecompressedStream.ToArray();
         }
+        */
         protected internal Civ3Section[] PopulateSections(byte[] Data)
         {
             int Count = 0;

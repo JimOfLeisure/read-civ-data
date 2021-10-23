@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blast\Blast\Blast.csproj" />
+    <ProjectReference Include="..\UtilsCiv3\ReadCivData.UtilsCiv3.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

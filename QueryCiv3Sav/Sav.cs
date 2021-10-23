@@ -7,16 +7,18 @@ namespace ReadCivData.QueryCiv3Sav
     {
         public BicData Bic;
         public Civ3File Sav;
-        public string DefaultBicPath;
+        public byte[] DefaultBic;
         public GameSection Game;
         public WrldSection Wrld;
-        public SavData(byte[] savBytes, string defaultBicPath)
+        public SavData(byte[] savBytes, byte[] defaultBic)
         {
-            DefaultBicPath = defaultBicPath;
+            // TODO: Should I just take a BicData instead of byte array?
+            DefaultBic = defaultBic;
             Sav = new Civ3File();
             Sav.Load(savBytes);
             Init();
         }
+        /*
         public SavData(string savPath, string defaultBicPath)
         {
             DefaultBicPath = defaultBicPath;
@@ -24,6 +26,7 @@ namespace ReadCivData.QueryCiv3Sav
             Sav.Load(savPath);
             Init();
         }
+        */
         protected void Init()
         {
             if(Sav.HasCustomBic)
@@ -32,7 +35,7 @@ namespace ReadCivData.QueryCiv3Sav
             }
             else
             {
-                Bic = new BicData(DefaultBicPath);
+                Bic = new BicData(DefaultBic);
             }
             Wrld = new WrldSection(this);
             Game = new GameSection(this);

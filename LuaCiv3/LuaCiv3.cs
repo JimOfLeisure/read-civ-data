@@ -1,14 +1,22 @@
 using System;
 using MoonSharp.Interpreter;
 using ReadCivData.QueryCiv3Sav;
+using ReadCivData.UtilsCiv3;
 
 namespace ReadCivData.LuaCiv3 {
+    // Passthrough so calling program doesn't need to use MoonSharp namespace
+    // TODO: Implement way to remove privleged items like file access for running untrusted code
+    public class Script : MoonSharp.Interpreter.Script {
+        public void RegisterCiv3File() {
+            UserData.RegisterType<Civ3File>();
+        }
+    }
     public class Civ3AsGlobalScript : Script
     {
         private SavData SavFile;
         public Civ3AsGlobalScript(string savPath, string defaultBicPath)
         {
-            SavFile = new SavData(savPath, defaultBicPath);
+            SavFile = new SavData(Util.ReadFile(savPath), Util.ReadFile(defaultBicPath));
             RegisterUserData();
             SetGlobals();
         }
