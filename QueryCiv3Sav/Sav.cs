@@ -14,8 +14,7 @@ namespace ReadCivData.QueryCiv3Sav
         {
             // TODO: Should I just take a BicData instead of byte array?
             DefaultBic = defaultBic;
-            Sav = new Civ3File();
-            Sav.Load(savBytes);
+            Sav = new Civ3File(savBytes);
             Init();
         }
         protected void Init()

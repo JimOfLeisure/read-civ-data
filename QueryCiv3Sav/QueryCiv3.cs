@@ -16,7 +16,7 @@ namespace ReadCivData.QueryCiv3Sav {
         protected internal Civ3Section[] Sections;
         public bool HasCustomBic {get; protected set;}
         public bool IsGameFile {get; protected set;}
-        public void Load(byte[] fileBytes)
+        public Civ3File(byte[] fileBytes)
         {
             IsGameFile = false;
             this.FileData = fileBytes;

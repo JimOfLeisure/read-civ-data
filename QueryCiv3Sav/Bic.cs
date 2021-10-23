@@ -8,8 +8,7 @@ namespace ReadCivData.QueryCiv3Sav
         public Civ3File Bic;
         public BicData(byte[] bicBytes)
         {
-            Bic = new Civ3File();
-            Bic.Load(bicBytes);
+            Bic = new Civ3File(bicBytes);
         }
         public BldgSection[] Bldg { get => (new ListSection<BldgSection>(Bic, Bic.SectionOffset("BLDG", 1))).Sections.ToArray(); }
         public CtznSection[] Ctzn { get => (new ListSection<CtznSection>(Bic, Bic.SectionOffset("CTZN", 1))).Sections.ToArray(); }
