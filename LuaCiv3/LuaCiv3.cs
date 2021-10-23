@@ -7,10 +7,16 @@ namespace ReadCivData.LuaCiv3 {
     // Passthrough so calling program doesn't need to use MoonSharp namespace; also sandboxes by default
     public class Script : MoonSharp.Interpreter.Script {
         // Default script environment is hard sandbox; see https://www.moonsharp.org/sandbox.html#removing-dangerous-apis
-        public Script(CoreModules coreModules = CoreModules.Preset_HardSandbox) : base(coreModules) {}
+        public Script(CoreModules coreModules = CoreModules.Preset_HardSandbox) : base(coreModules) {
+            RegisterQueryCiv3Types();
+        }
         public void LoadCiv3(byte[] savBytes, byte[] defaultBicBytes) {
             SavData savFile = new SavData(savBytes, defaultBicBytes);
-            // NOTE: I thought I could just register SavData, but nope I have to register every user class explicitly
+
+            Globals["civ3"] = savFile;
+        }
+        // Enables these type instances to be accssed directly by Lua
+        private void RegisterQueryCiv3Types() {
             UserData.RegisterType<SavData>();
             UserData.RegisterType<BicData>();
             UserData.RegisterType<Civ3File>();
@@ -37,8 +43,6 @@ namespace ReadCivData.LuaCiv3 {
             UserData.RegisterType<TerrSection>();
             UserData.RegisterType<WsizSection>();
             UserData.RegisterType<FlavSection>();
-
-            Globals["civ3"] = savFile;
         }
     }
     public class Civ3AsGlobalScript : Script

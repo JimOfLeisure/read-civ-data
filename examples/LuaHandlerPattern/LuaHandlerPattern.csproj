@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\LuaCiv3\ReadCivData.LuaCiv3.csproj" />
     <ProjectReference Include="..\..\UtilsCiv3\ReadCivData.UtilsCiv3.csproj" />
+    <ProjectReference Include="..\..\QueryCiv3Sav\ReadCivData.QueryCiv3Sav.csproj" />
   </ItemGroup>
 
   <ItemGroup>

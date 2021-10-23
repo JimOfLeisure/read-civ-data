@@ -9,3 +9,5 @@ I also thought if I just registered SavData as a user type that it would registe
 I had also imagined a possible Lua-as-handler function pattern where I'd run a script to define a Lua function and then call it from C# with the SavData object as a parameter, but I'm not sure how to do it or if it's even possible. (Update: Yes, see https://www.moonsharp.org/tutorial2.html step 2)
 
 I'll probably consolidate to one MoonSharp.Interpreter.Script child, and have methods and/or constructor flags for how to set up the global environment.
+
+Day after (2021-10-23) note: I'm working on examples/LuaHandlerPattern and am wondering about how much these projects should be separated vs combined. I'm having to import UtilsCiv3, LuaCiv3 *and* QueryCiv3. I've been tempted to make proxy/passthrough classes, but I need to think more of how these projects/libraries will be used and what is good separation and what is confusing redundancy.
