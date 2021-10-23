@@ -4,17 +4,47 @@ using ReadCivData.QueryCiv3Sav;
 using ReadCivData.UtilsCiv3;
 
 namespace ReadCivData.LuaCiv3 {
-    // Passthrough so calling program doesn't need to use MoonSharp namespace
-    // TODO: Implement way to remove privleged items like file access for running untrusted code
+    // Passthrough so calling program doesn't need to use MoonSharp namespace; also sandboxes by default
     public class Script : MoonSharp.Interpreter.Script {
-        public void RegisterCiv3File() {
+        // Default script environment is hard sandbox; see https://www.moonsharp.org/sandbox.html#removing-dangerous-apis
+        public Script(CoreModules coreModules = CoreModules.Preset_HardSandbox) : base(coreModules) {}
+        public void LoadCiv3(byte[] savBytes, byte[] defaultBicBytes) {
+            SavData savFile = new SavData(savBytes, defaultBicBytes);
+            // NOTE: I thought I could just register SavData, but nope I have to register every user class explicitly
+            UserData.RegisterType<SavData>();
+            UserData.RegisterType<BicData>();
             UserData.RegisterType<Civ3File>();
+            UserData.RegisterType<GameSection>();
+            UserData.RegisterType<WrldSection>();
+            UserData.RegisterType<MapTile>();
+            UserData.RegisterType<ContItem>();
+            UserData.RegisterType<LeaderItem>();
+            UserData.RegisterType<CityItem>();
+            
+            UserData.RegisterType<BldgSection>();
+            UserData.RegisterType<CtznSection>();
+            UserData.RegisterType<CultSection>();
+            UserData.RegisterType<DiffSection>();
+            UserData.RegisterType<ErasSection>();
+            UserData.RegisterType<EspnSection>();
+            UserData.RegisterType<ExprSection>();
+            UserData.RegisterType<GoodSection>();
+            UserData.RegisterType<GovtSection>();
+            UserData.RegisterType<PrtoSection>();
+            UserData.RegisterType<RaceSection>();
+            UserData.RegisterType<TechSection>();
+            UserData.RegisterType<TfrmSection>();
+            UserData.RegisterType<TerrSection>();
+            UserData.RegisterType<WsizSection>();
+            UserData.RegisterType<FlavSection>();
+
+            Globals["civ3"] = savFile;
         }
     }
     public class Civ3AsGlobalScript : Script
     {
         private SavData SavFile;
-        public Civ3AsGlobalScript(string savPath, string defaultBicPath)
+        public Civ3AsGlobalScript(string savPath, string defaultBicPath) : base(CoreModules.Preset_HardSandbox)
         {
             SavFile = new SavData(Util.ReadFile(savPath), Util.ReadFile(defaultBicPath));
             RegisterUserData();
