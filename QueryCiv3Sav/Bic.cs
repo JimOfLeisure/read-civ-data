@@ -11,13 +11,6 @@ namespace ReadCivData.QueryCiv3Sav
             Bic = new Civ3File();
             Bic.Load(bicBytes);
         }
-        /*
-        public BicData(string bicPath)
-        {
-            Bic = new Civ3File();
-            Bic.Load(bicPath);
-        }
-        */
         public BldgSection[] Bldg { get => (new ListSection<BldgSection>(Bic, Bic.SectionOffset("BLDG", 1))).Sections.ToArray(); }
         public CtznSection[] Ctzn { get => (new ListSection<CtznSection>(Bic, Bic.SectionOffset("CTZN", 1))).Sections.ToArray(); }
         public CultSection[] Cult { get => (new ListSection<CultSection>(Bic, Bic.SectionOffset("CULT", 1))).Sections.ToArray(); }

@@ -18,15 +18,6 @@ namespace ReadCivData.QueryCiv3Sav
             Sav.Load(savBytes);
             Init();
         }
-        /*
-        public SavData(string savPath, string defaultBicPath)
-        {
-            DefaultBicPath = defaultBicPath;
-            Sav = new Civ3File();
-            Sav.Load(savPath);
-            Init();
-        }
-        */
         protected void Init()
         {
             if(Sav.HasCustomBic)

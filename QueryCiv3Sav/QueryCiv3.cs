@@ -1,7 +1,5 @@
 using System;
-// using System.IO;
 using System.Collections.Generic;
-using Blast;
 using System.Text.RegularExpressions;
 
 namespace ReadCivData.QueryCiv3Sav {
@@ -12,6 +10,7 @@ namespace ReadCivData.QueryCiv3Sav {
     public class Civ3File {
         // Encoding code page ID; 1252 is Civ3 encoding for US language version
         //   See https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=net-5.0 for other values
+        // NOTE: .NET 5 and later require a Nuget package and Encoder registration for these older encoding pages
         public int Civ3StringEncoding = 1252;
         protected internal byte[] FileData;
         protected internal Civ3Section[] Sections;
@@ -35,20 +34,6 @@ namespace ReadCivData.QueryCiv3Sav {
                 }
             }
         }
-        /*
-        public void Load(string pathName)
-        {
-            byte[] MyFileData = File.ReadAllBytes(pathName);
-            if (MyFileData[0] == 0x00 && (MyFileData[1] == 0x04 || MyFileData[1] == 0x05 || MyFileData[1] == 0x06))
-            {
-                Load(Decompress(MyFileData));
-            }
-            else
-            {
-                Load(MyFileData);
-            }
-        }
-        */
         public byte[] CustomBic
         { get {
             if(HasCustomBic)
@@ -73,15 +58,6 @@ namespace ReadCivData.QueryCiv3Sav {
             }
             return null;
         }}
-        /*
-        protected internal byte[] Decompress(byte[] compressedBytes)
-        {
-            MemoryStream DecompressedStream = new MemoryStream();
-            BlastDecoder Decompressor = new BlastDecoder(new MemoryStream(compressedBytes, writable: false), DecompressedStream);
-            Decompressor.Decompress();
-            return DecompressedStream.ToArray();
-        }
-        */
         protected internal Civ3Section[] PopulateSections(byte[] Data)
         {
             int Count = 0;
