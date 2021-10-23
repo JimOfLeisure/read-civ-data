@@ -2,6 +2,7 @@
 using ReadCivData.LuaCiv3;
 using ReadCivData.QueryCiv3Sav;
 using ReadCivData.UtilsCiv3;
+using MoonSharp.Interpreter;
 
 namespace LuaHandlerPattern
 {
@@ -14,14 +15,14 @@ namespace LuaHandlerPattern
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             // Create Lua environment
-            Script Lua = new Script();
+            ReadCivData.LuaCiv3.Script lua = new ReadCivData.LuaCiv3.Script();
 
             // Define a Lua handler function (probably usually loaded from elsewhere)
-            Lua.DoString(@"
+            lua.DoString(@"
                 -- Lua script
                 function process_save(civ3)
                     process_count = process_count + 1
-                    io.write(civ3.leaderItem[2].raceID)
+                    return ""Player 1 raceID is "" .. civ3.lead[2].raceID
                 end
 
                 -- if desired, can alter the Lua environment while defining function
@@ -35,6 +36,14 @@ namespace LuaHandlerPattern
             byte[] defaultBicBytes = Util.ReadFile(installPath + "/Conquests/conquests.biq");
             byte[] savFileBytes = Util.ReadFile(installPath + "/Conquests/Saves/Auto/Conquests Autosave 4000 BC.SAV");
 
+            // Create a SavData object
+            SavData civ3 = new SavData(savFileBytes, defaultBicBytes);
+
+            // Call previously-defined Lua function with the SavData object
+            DynValue res = lua.Call(lua.Globals["process_save"], civ3);
+
+            // Do something with the return value
+            Console.WriteLine(res);
         }
     }
 }

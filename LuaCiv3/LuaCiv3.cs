@@ -4,6 +4,8 @@ using ReadCivData.QueryCiv3Sav;
 using ReadCivData.UtilsCiv3;
 
 namespace ReadCivData.LuaCiv3 {
+    // Passthrough so calling program doesn't need to use MoonSharp namespace
+    // public class DynValue: MoonSharp.Interpreter.DynValue {}
     // Passthrough so calling program doesn't need to use MoonSharp namespace; also sandboxes by default
     public class Script : MoonSharp.Interpreter.Script {
         // Default script environment is hard sandbox; see https://www.moonsharp.org/sandbox.html#removing-dangerous-apis
