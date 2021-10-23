@@ -3,10 +3,10 @@ using MoonSharp.Interpreter;
 using ReadCivData.QueryCiv3Sav;
 
 namespace ReadCivData.LuaCiv3 {
-    public class Civ3Script : Script
+    public class Civ3AsGlobalScript : Script
     {
         private SavData SavFile;
-        public Civ3Script(string savPath, string defaultBicPath)
+        public Civ3AsGlobalScript(string savPath, string defaultBicPath)
         {
             SavFile = new SavData(savPath, defaultBicPath);
             RegisterUserData();

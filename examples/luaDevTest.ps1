@@ -8,7 +8,7 @@ $Civ3Path = [ReadCivData.UtilsCiv3.Util]::GetCiv3Path()
 
 $SavPath = "$Civ3Path/Conquests/Saves/Auto/Conquests Autosave 3950 BC.SAV"
 $DefaultBicPath = "${Civ3Path}/Conquests/conquests.biq"
-$Lua = New-Object ReadCivData.LuaCiv3.Civ3Script($SavPath, $DefaultBicPath)
+$Lua = New-Object ReadCivData.LuaCiv3.Civ3AsGlobalScript($SavPath, $DefaultBicPath)
 
 $Lua.DoString('
     print(install_path)
