@@ -12,6 +12,7 @@ namespace ReadCivData.QueryCiv3Sav
         {
             Data = data;
             Offset = Data.Sav.SectionOffset(headerString, 1);
+            Length = length;
         }
         public byte[] RawBytes { get => Data.Sav.GetBytes(Offset, Length); }
     }
